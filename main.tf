@@ -35,19 +35,3 @@ resource "azurerm_container_registry" "example" {
   admin_enabled       = true
 }
 
-resource "null_resource" "docker_build_push" {
-  provisioner "local-exec" {
-    command = "bash push_to_acr.sh"
-    environment = {
-      SLACK_BOT_TOKEN       = var.slack_bot_token
-      SLACK_APP_TOKEN       = var.slack_app_token
-      AZURE_CLIENT_SECRET   = var.azure_client_secret
-      AZURE_CLIENT_ID       = var.azure_client_id
-      AZURE_TENANT_ID       = var.azure_tenant_id
-      AZURE_SUBSCRIPTION_ID = var.azure_subscription_id
-    }
-  }
-
-  depends_on = [azurerm_container_registry.example]
-}
-
