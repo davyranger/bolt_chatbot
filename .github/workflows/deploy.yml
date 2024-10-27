@@ -59,7 +59,7 @@ jobs:
     - name: Run OPA Score Policy Check
       id: opa-score-check
       run: |
-        opa exec --decision .github/workflows/terraform.rego --input tfplan.json "data.terraform.analysis.score"
+        opa exec --decision terraform/analysis/score --bundle .github/workflows/terraform.rego tfplan.json
       continue-on-error: false
 
     - name: Check OPA Authorization
