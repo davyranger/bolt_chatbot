@@ -1,0 +1,52 @@
+name: Destroy Slack Bot on Azure
+
+on:
+  workflow_dispatch: # Allows the workflow to be triggered manually
+
+# Special permissions required for OIDC authentication
+permissions:
+  id-token: write
+  contents: read
+
+# These environment variables are used by the terraform azure provider to setup OIDC authentication. 
+env:
+  ARM_CLIENT_ID: "${{ secrets.AZURE_CLIENT_ID }}"
+  ARM_SUBSCRIPTION_ID: "${{ secrets.AZURE_SUBSCRIPTION_ID }}"
+  ARM_TENANT_ID: "${{ secrets.AZURE_TENANT_ID }}"
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install slack_sdk flask
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v1
+
+    - name: Terraform Init
+      run: terraform init
+      working-directory: ./terraform
+
+    - name: Terraform Plan
+      run: terraform plan -destroy # Prepare the destroy plan
+      working-directory: ./terraform
+
+    - name: Terraform Destroy
+      run: terraform destroy -auto-approve # Execute the destroy command
+      working-directory: ./terraform
