@@ -7,3 +7,10 @@ variable "slack_app_token" {
   type      = string
   sensitive = true
 }
+
+variable "azure_client_secret" {
+  type      = string
+  sensitive = true
+}
+
+

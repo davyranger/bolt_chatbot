@@ -41,6 +41,7 @@ resource "null_resource" "docker_build_push" {
     environment = {
       SLACK_BOT_TOKEN = var.slack_bot_token
 	    SLACK_APP_TOKEN=  var.slack_app_token
+      AZURE_CLIENT_SECRET = var.azure_client_secret
     }
   }
 
