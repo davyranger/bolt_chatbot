@@ -36,9 +36,9 @@ jobs:
     - name: Terraform Apply
       run: terraform apply -auto-approve
 
-    # New steps for building and pushing the Docker image to ACR
-    - name: Set up Azure CLI
-      uses: azure/setup-azure-cli@v1
+    # # New steps for building and pushing the Docker image to ACR
+    # - name: Set up Azure CLI
+    #   uses: azure/setup-azure-cli@v1
 
     # - name: Log in to Azure
     #   run: |
