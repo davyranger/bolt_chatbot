@@ -37,9 +37,12 @@ jobs:
     - name: Terraform Apply
       run: terraform apply -auto-approve
 
-    # # New steps for building and pushing the Docker image to ACR
-    # - name: Set up Azure CLI
-    #   uses: azure/setup-azure-cli@v1
+    - name: Debug environment variables
+      run: |
+        echo "AZURE_CLIENT_ID: $AZURE_CLIENT_ID"
+        echo "AZURE_TENANT_ID: $AZURE_TENANT_ID"  # Check if this is empty
+        echo "AZURE_SUBSCRIPTION_ID: $AZURE_SUBSCRIPTION_ID"
+    
 
     - name: Log in to Azure
       run: |
