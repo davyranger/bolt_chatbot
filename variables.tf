@@ -13,4 +13,14 @@ variable "azure_client_secret" {
   sensitive = true
 }
 
+variable "azure_client_id" {
+  type      = string
+  sensitive = true
+}
+
+variable "azure_tenant_id" {
+  type      = string
+  sensitive = true
+}
+
 

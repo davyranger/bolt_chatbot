@@ -42,6 +42,8 @@ resource "null_resource" "docker_build_push" {
       SLACK_BOT_TOKEN = var.slack_bot_token
 	    SLACK_APP_TOKEN=  var.slack_app_token
       AZURE_CLIENT_SECRET = var.azure_client_secret
+      AZURE_CLIENT_ID      = var.azure_client_id
+      AZURE_TENANT_ID      = var.azure_tenant_id
     }
   }
 
