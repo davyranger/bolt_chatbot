@@ -49,7 +49,7 @@ jobs:
 
     - name: Build Docker image
       run: |
-        docker build -t boltslackbotcontainerregistry.azurecr.io/slack-bot:latest .
+        docker build -t boltslackbotcontainerregistry.azurecr.io/slack-bot:latest ./Docker
 
     - name: Push Docker image to ACR
       run: |
