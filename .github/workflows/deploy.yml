@@ -39,6 +39,11 @@ jobs:
       run: |
         terraform plan -out "tfplan"
 
+    - name: Convert Terraform Plan to JSON
+      run: |
+        sudo apt-get install jq
+        terraform show -no-color -json "tfplan" | jq > tfplan.json
+
     - name: Install OPA
       run: |
         curl -L -o opa https://openpolicyagent.org/downloads/latest/opa_linux_amd64
@@ -48,21 +53,20 @@ jobs:
     - name: Run OPA Authz Policy Check
       id: opa-authz-check
       run: |
-        AUTHZ_RESULT=$(terraform show -no-color -json "tfplan" | opa eval --data .github/workflows/terraform.rego --input - "data.terraform.analysis.authz")
-        echo "AUTHZ_RESULT=$AUTHZ_RESULT" >> $GITHUB_ENV
-
+        opa eval --data .github/workflows/terraform.rego --input tfplan.json "data.terraform.analysis.authz"
+      continue-on-error: false
+    
     - name: Run OPA Score Policy Check
       id: opa-score-check
       run: |
-        SCORE_RESULT=$(terraform show -no-color -json "tfplan" | opa eval --data .github/workflows/terraform.rego --input - "data.terraform.analysis.score")
-        echo "SCORE_RESULT=$SCORE_RESULT" >> $GITHUB_ENV
+        opa eval --data .github/workflows/terraform.rego --input tfplan.json "data.terraform.analysis.score"
+      continue-on-error: false
 
     - name: Check OPA Authorization
-      if: env.AUTHZ_RESULT != 'true' || env.SCORE_RESULT != 'true'
+      if: steps.opa-check.outcome == 'failure'
       run: |
         echo "Terraform plan does not meet policy requirements."
         exit 1
-
 
   terraform-apply:
     runs-on: ubuntu-latest
