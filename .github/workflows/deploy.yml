@@ -82,14 +82,14 @@ jobs:
 
     - name: Install OPA
       run: |
-        curl -L -o opa curl -L -o opa https://openpolicyagent.org/downloads/latest/opa_linux_amd64
+        curl -L -o opa https://openpolicyagent.org/downloads/latest/opa_linux_amd64
         chmod +x opa
         sudo mv opa /usr/local/bin/
 
     - name: Run OPA Policy Check
       id: opa-check
       run: |
-        echo '{ "resource_changes": '$(cat tfplan.json)'}' | opa eval -i - -d terraform.rego 'data.terraform.analysis.authz' -f pretty
+        opa eval --data .github/workflows/terraform.rego --input tfplan.json "data.terraform.analysis.authz"
       continue-on-error: false
 
     - name: Check OPA Authorization
