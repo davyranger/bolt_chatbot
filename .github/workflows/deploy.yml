@@ -42,7 +42,8 @@ jobs:
 
     - name: Convert Terraform Plan to JSON
       run: |
-        terraform show -json "tfplan" > cat tfplan.json
+        terraform show -json "tfplan" | jq > tfplan.json
+        jq '.configuration.provider_config' tfplan.json
 
     - name: Install OPA
       run: |
