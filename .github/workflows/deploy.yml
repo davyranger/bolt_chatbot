@@ -29,8 +29,14 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Setup Terraform
-      uses: hashicorp/setup-terraform@v1
+    - name: Setup OPA
+      uses: open-policy-agent/setup-opa@v2
+      with:
+        version: latest
+
+    - uses: hashicorp/setup-terraform@{{REF}}
+      with:
+        terraform_wrapper: false
 
     - name: Terraform Init
       run: terraform init -reconfigure
@@ -41,13 +47,12 @@ jobs:
 
     - name: Convert Terraform Plan to JSON
       run: |
-        - run: terraform show -json tfplan | grep '^{.*}$' > tfplan.json
+        - run: terraform show -json tfplan > tfplan.json
 
-    - name: Install OPA
-      run: |
-        curl -L -o opa https://openpolicyagent.org/downloads/latest/opa_linux_amd64
-        chmod +x opa
-        sudo mv opa /usr/local/bin/
+    - name: Setup OPA
+      uses: open-policy-agent/setup-opa@v2
+      with:
+        version: latest
 
     - name: Run OPA Authz Policy Check
       id: opa-authz-check
