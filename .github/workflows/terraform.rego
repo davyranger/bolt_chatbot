@@ -28,7 +28,6 @@ resource_types = {
 default authz = false
 authz {
     score < blast_radius
-    not touches_iam
 }
 
 # Compute the score for a Terraform plan as the weighted sum of deletions, creations, modifications
@@ -53,8 +52,8 @@ resources[resource_type] = all {
     some resource_type
     resource_types[resource_type]
     all := [name |
-        tfplan[name] = _
-        startswith(name, resource_type)
+        name:= tfplan.resource_changes[_]
+        name.type == resource_type
     ]
 }
 
@@ -63,8 +62,8 @@ num_deletes[resource_type] = num {
     some resource_type
     resource_types[resource_type]
     all := resources[resource_type]
-    deletions := [name | name := all[_]; tfplan[name]["destroy"] == true]
-    num := count(deletions)
+    creates := [res | res := all[_]; res.change.actions[_] == "create"]
+    num := count(creates)
 }
 
 # number of creations of resources of a given type
@@ -72,7 +71,7 @@ num_creates[resource_type] = num {
     some resource_type
     resource_types[resource_type]
     all := resources[resource_type]
-    creates := [name | all[_] = name; tfplan[name]["id"] == ""]
+    deletions := [res | res := all[_]; res.change.actions[_] == "delete"]
     num := count(creates)
 }
 
@@ -81,6 +80,6 @@ num_modifies[resource_type] = num {
     some resource_type
     resource_types[resource_type]
     all := resources[resource_type]
-    modifies := [name | name := all[_]; obj := tfplan[name]; obj["destroy"] == false; not obj["id"]]
+    modifies := [res | res := all[_]; res.change.actions[_] == "update"]
     num := count(modifies)
 }
