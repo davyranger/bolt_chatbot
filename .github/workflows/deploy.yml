@@ -38,11 +38,11 @@ jobs:
 
     - name: Terraform Plan
       run: |
-        terraform plan -out=tfplan.json
+        terraform plan -out=output.tfplan
 
     - name: Convert Terraform Plan to JSON
       run: |
-        terraform show -json tfplan.json
+        terraform show -no-color -json output.tfplan > output.json
         cat tfplan.json
 
     - name: Install OPA
