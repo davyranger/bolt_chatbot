@@ -1,10 +1,11 @@
 #!/bin/bash
 
 # Log in to ACR
-az acr login --name exampleacr
+az login
+az acr login --name boltslackbotcontainerregistry
 
 # Build the Docker image
-docker build -t exampleacr.azurecr.io/slack-bot:latest .
+docker build -t boltslackbotcontainerregistry.azurecr.io/slack-bot:latest .
 
 # Push the image to ACR
-docker push exampleacr.azurecr.io/slack-bot:latest
+docker push boltslackbotcontainerregistry.azurecr.io/slack-bot:latest
