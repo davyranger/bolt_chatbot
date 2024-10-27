@@ -41,7 +41,7 @@ jobs:
 
     - name: Convert Terraform Plan to JSON
       run: |
-        terraform show -json "tfplan" | jq > tfplan.json
+        terraform show -no-color -json "tfplan" | jq > tfplan.json
 
     - name: Install OPA
       run: |
