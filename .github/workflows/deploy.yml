@@ -22,10 +22,6 @@ jobs:
   terraform:
     runs-on: ubuntu-latest
 
-    permissions:
-      id-token: write
-      contents: read
-
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
@@ -34,7 +30,7 @@ jobs:
       uses: hashicorp/setup-terraform@v1
 
     - name: Terraform Init
-      run: terraform init
+      run: terraform init -reconfigure
 
     - name: Terraform Plan
       run: terraform plan
