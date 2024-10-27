@@ -10,8 +10,12 @@ app should be accessible on http://localhost:8501
 
 # to push to azure container registry from your local machine
 
-docker build -t careerapp.azurecr.io/cloud-career-roadmap-generator:latest .
+docker build -t boltslackbotcontainerregistry.azurecr.io/cloud-career-roadmap-generator:latest .
 
-docker push careerapp.azurecr.io/cloud-career-roadmap-generator:latest
+docker push boltslackbotcontainerregistry.azurecr.io/cloud-career-roadmap-generator:latest
 
-docker pull careerapp.azurecr.io/cloud-career-roadmap-generator:latest
+docker pull boltslackbotcontainerregistry.azurecr.io/cloud-career-roadmap-generator:latest
+
+# if the image is not on the local machine it will be pulled from the acr
+
+docker run -p 3000:3000 -e SLACK_BOT_TOKEN=$SLACK_BOT_TOKEN -e SLACK_APP_TOKEN=$SLACK_APP_TOKEN boltslackbotcontainerregistry.azurecr.io/slack-bot:latest
