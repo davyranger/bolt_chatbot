@@ -49,7 +49,7 @@ score = s {
 ####################
 
 # list of all resources of a given type
-instance_names[resource_type] = all {
+resources[resource_type] = all {
     some resource_type
     resource_types[resource_type]
     all := [name |
@@ -62,7 +62,7 @@ instance_names[resource_type] = all {
 num_deletes[resource_type] = num {
     some resource_type
     resource_types[resource_type]
-    all := instance_names[resource_type]
+    all := resources[resource_type]
     deletions := [name | name := all[_]; tfplan[name]["destroy"] == true]
     num := count(deletions)
 }
@@ -71,7 +71,7 @@ num_deletes[resource_type] = num {
 num_creates[resource_type] = num {
     some resource_type
     resource_types[resource_type]
-    all := instance_names[resource_type]
+    all := resources[resource_type]
     creates := [name | all[_] = name; tfplan[name]["id"] == ""]
     num := count(creates)
 }
@@ -80,7 +80,7 @@ num_creates[resource_type] = num {
 num_modifies[resource_type] = num {
     some resource_type
     resource_types[resource_type]
-    all := instance_names[resource_type]
+    all := resources[resource_type]
     modifies := [name | name := all[_]; obj := tfplan[name]; obj["destroy"] == false; not obj["id"]]
     num := count(modifies)
 }
