@@ -37,7 +37,9 @@ jobs:
       run: terraform init -reconfigure
 
     - name: Terraform Plan
-      run: terraform plan -out=tfplan.binary
+      run: |
+        terraform plan -out=tfplan.binary
+        cat tfplan.binary
 
     - name: Convert Terraform Plan to JSON
       run: |
