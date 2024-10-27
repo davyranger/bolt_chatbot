@@ -25,10 +25,6 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: List files
-      run: |
-        ls -R .
-
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v1
 
@@ -53,7 +49,7 @@ jobs:
 
     - name: Build Docker image
       run: |
-        docker build -t boltslackbotcontainerregistry.azurecr.io/slack-bot:latest ./Docker
+        docker build -t boltslackbotcontainerregistry.azurecr.io/slack-bot:latest .
 
     - name: Push Docker image to ACR
       run: |
