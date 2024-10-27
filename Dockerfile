@@ -7,11 +7,13 @@ WORKDIR /app
 # Copy the app files
 COPY . /app
 
-# Install dependencies
-RUN pip install -r requirements.txt
+# # Install dependencies
+# RUN pip install -r ./requirements.txt
 
 # Set environment variables
 ENV SLACK_BOT_TOKEN=${SLACK_BOT_TOKEN}
+
+ENV SLACK_APP_TOKEN=${SLACK_APP_TOKEN}
 
 # Run the app
 CMD ["python", "app.py"]
