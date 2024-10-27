@@ -17,6 +17,9 @@ env:
   AZURE_CLIENT_SECRET : "${{secrets.AZURE_CLIENT_SECRET }}"
   ARM_TENANT_ID: "${{ secrets.AZURE_TENANT_ID }}"
 
+  SLACK_BOT_TOKEN: "${{ secrets.SLACK_BOT_TOKEN }}"
+  SLACK_APP_TOKEN: "${{ secrets.SLACK_APP_TOKEN }}"
+
 jobs:
   terraform:
     runs-on: ubuntu-latest
@@ -49,7 +52,10 @@ jobs:
 
     - name: Build Docker image
       run: |
-        docker build -t boltslackbotcontainerregistry.azurecr.io/slack-bot:latest .
+        docker build \
+          --build-arg SLACK_BOT_TOKEN=${{ secrets.SLACK_BOT_TOKEN }} \
+          --build-arg SLACK_APP_TOKEN=${{ secrets.SLACK_APP_TOKEN }} \
+          -t boltslackbotcontainerregistry.azurecr.io/slack-bot:latest .
 
     - name: Push Docker image to ACR
       run: |

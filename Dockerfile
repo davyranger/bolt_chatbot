@@ -5,10 +5,11 @@ FROM python:3.12-slim
 WORKDIR /app
 
 # Copy the app files
-COPY . /app
+# Copy only the necessary app files
+COPY first-bolt-app/ /app/
 
-# # Install dependencies
-# RUN pip install -r ./requirements.txt
+# Install dependencies
+RUN pip install -r ./requirements.txt
 
 # Set environment variables
 ENV SLACK_BOT_TOKEN=${SLACK_BOT_TOKEN}
