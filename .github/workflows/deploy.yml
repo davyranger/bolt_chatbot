@@ -39,9 +39,9 @@ jobs:
 
     - name: Debug environment variables
       run: |
-        echo "AZURE_CLIENT_ID: $AZURE_CLIENT_ID"
-        echo "AZURE_TENANT_ID: $AZURE_TENANT_ID"  # Check if this is empty
-        echo "AZURE_SUBSCRIPTION_ID: $AZURE_SUBSCRIPTION_ID"
+        echo "ARM_CLIENT_ID: $ARM_CLIENT_ID"
+        echo "ARM_TENANT_ID: $ARM_TENANT_ID"
+        echo "ARM_SUBSCRIPTION_ID: $ARM_SUBSCRIPTION_ID"
     
 
     - name: Log in to Azure
