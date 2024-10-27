@@ -41,13 +41,7 @@ jobs:
 
     - name: Convert Terraform Plan to JSON
       run: |
-        terraform show -json "tfplan" > tfplan.json
-        cat tfplan.json
-
-    - name: Set Plan Output
-      run: |
-        echo "tfplan_output=$(cat tfplan.json)" >> $GITHUB_OUTPUT
-      
+        terraform show -json "tfplan" | jq > tfplan.json
 
     - name: Install OPA
       run: |
