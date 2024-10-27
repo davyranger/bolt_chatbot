@@ -50,8 +50,7 @@ jobs:
     - name: Run OPA Policy Check
       id: opa-check
       run: |
-        opa_input='{ "resource_changes": '$(cat tfplan.json)'}'
-        echo "$opa_input" | opa eval -i /dev/stdin -d terraform.rego 'data.terraform.analysis.authz' -f pretty
+        opa eval --data terraform.rego --input tfplan.json "data.terraform.analysis.authz"
       continue-on-error: false
 
 
