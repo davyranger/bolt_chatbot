@@ -52,6 +52,7 @@ jobs:
       id: opa-check
       run: |
         opa eval --data .github/workflows/terraform.rego --input tfplan.json "data.terraform.analysis.authz"
+        opa eval --data .github/workflows/terraform.rego --input tfplan.json "data.terraform.analysis.score"
       continue-on-error: false
 
 
@@ -91,6 +92,7 @@ jobs:
       id: opa-check
       run: |
         opa eval --data .github/workflows/terraform.rego --input tfplan.json "data.terraform.analysis.authz"
+        opa eval --data .github/workflows/terraform.rego --input tfplan.json "data.terraform.analysis.score"
       continue-on-error: false
 
     - name: Check OPA Authorization
