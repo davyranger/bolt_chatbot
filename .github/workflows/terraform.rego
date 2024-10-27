@@ -63,7 +63,7 @@ num_deletes[resource_type] = num {
     resource_types[resource_type]
     all := resources[resource_type]
     creates := [res | res := all[_]; res.change.actions[_] == "create"]
-    num := count(creates)
+    num := count(deletions)
 }
 
 # number of creations of resources of a given type
@@ -72,7 +72,7 @@ num_creates[resource_type] = num {
     resource_types[resource_type]
     all := resources[resource_type]
     deletions := [res | res := all[_]; res.change.actions[_] == "delete"]
-    num := count(deletions)
+    num := count(creates)
 }
 
 # number of modifications to resources of a given type
