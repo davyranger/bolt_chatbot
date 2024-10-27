@@ -43,7 +43,7 @@ jobs:
 
     - name: Install OPA
       run: |
-        curl -L -o opa https://openpolicyagent.github.io/opa/releases/v0.51.0/opa_linux_amd64
+        curl -L -o opa curl -L -o opa https://openpolicyagent.org/downloads/latest/opa_linux_amd64
         chmod +x opa
         sudo mv opa /usr/local/bin/
 
