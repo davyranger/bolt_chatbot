@@ -27,12 +27,6 @@ resource "azurerm_resource_group" "rg" {
   location = "australiacentral" # Azure region where the resource group is located
 }
 
-# Define an Azure Resource Group for organizing resources
-resource "azurerm_resource_group" "rg_2" {
-  name     = "slack-bot-rg-2"     # Name of the resource group
-  location = "australiacentral" # Azure region where the resource group is located
-}
-
 resource "azurerm_container_registry" "example" {
   name                = "boltslackbotcontainerregistry"
   resource_group_name = azurerm_resource_group.rg.name
