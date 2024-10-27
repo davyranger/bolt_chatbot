@@ -50,7 +50,7 @@ jobs:
     - name: Run OPA Policy Check
       id: opa-check
       run: |
-        opa eval --data terraform.rego --input tfplan.json "data.terraform.analysis.authz"
+        opa eval --data .github/workflows/terraform.rego --input tfplan.json "data.terraform.analysis.authz"
       continue-on-error: false
 
 
