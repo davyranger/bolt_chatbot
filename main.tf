@@ -39,8 +39,8 @@ resource "null_resource" "docker_build_push" {
   provisioner "local-exec" {
     command = "bash push_to_acr.sh"
     environment = {
-      SLACK_BOT_TOKEN = "<your-bot-token>"
-	  SLACK_APP_TOKEN=  "<your-app-level-token>"
+      SLACK_BOT_TOKEN = var.slack_bot_token
+	    SLACK_APP_TOKEN=  var.slack_app_token
     }
   }
 
