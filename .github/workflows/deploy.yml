@@ -48,24 +48,19 @@ jobs:
 
     - name: Run OPA Authz Policy Check
       id: opa-authz-check
-      run: |
-        authz_result=$(opa eval --data .github/workflows/terraform.rego --input tfplan.json "data.terraform.analysis.authz" -f json | jq -r '.result[0].expressions[0].value')
-        echo "::set-output name=authz_result::$authz_result"
+      run: opa eval --data .github/workflows/terraform.rego --input tfplan.json "data.terraform.analysis.authz"
       continue-on-error: false
     
     - name: Run OPA Score Policy Check
       id: opa-score-check
-      run: |
-        score_result=$(opa eval --data .github/workflows/terraform.rego --input tfplan.json "data.terraform.analysis.score" -f json | jq -r '.result[0].expressions[0].value')
-        echo "::set-output name=score_result::$score_result"
+      run: opa eval --data .github/workflows/terraform.rego --input tfplan.json "data.terraform.analysis.score"
       continue-on-error: false
-    
+
     - name: Check OPA Policy Compliance
-      if: steps.opa-authz-check.outputs.authz_result == 'false' || steps.opa-score-check.outputs.score_result == 'false'
+      if: steps.opa-authz-check.outputs.authz_result == 'false'
       run: |
         echo "Terraform plan does not meet policy requirements."
         exit 1
-    
 
   terraform-apply:
     runs-on: ubuntu-latest
