@@ -46,7 +46,7 @@ jobs:
 
     - name: Convert Terraform Plan to JSON
       run: |
-        - run: terraform show -json tfplan > tfplan.json
+          terraform show -json tfplan | grep '^{.*}$' > tfplan.json
 
     - name: Setup OPA
       uses: open-policy-agent/setup-opa@v2
