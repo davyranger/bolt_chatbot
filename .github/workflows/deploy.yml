@@ -64,7 +64,7 @@ jobs:
       continue-on-error: false
 
     - name: Check OPA Policy Compliance
-      if: steps.opa-authz-check.outcome == 'failure' || steps.opa-score-check.outcome == 'failure'
+      if: steps.opa-authz-check.outcome == 'false' || steps.opa-score-check.outcome == 'failure'
       run: |
         echo "Terraform plan does not meet policy requirements."
         exit 1
