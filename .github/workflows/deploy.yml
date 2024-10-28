@@ -29,11 +29,6 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Setup OPA
-      uses: open-policy-agent/setup-opa@v2
-      with:
-        version: latest
-
     - name: Terraform install
       uses: hashicorp/setup-terraform@v3
 
@@ -77,11 +72,6 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
-
-    - name: Setup OPA
-      uses: open-policy-agent/setup-opa@v2
-      with:
-        version: latest
 
     - name: Terraform install
       uses: hashicorp/setup-terraform@v3
