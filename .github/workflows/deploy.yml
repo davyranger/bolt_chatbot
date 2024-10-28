@@ -29,11 +29,6 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Setup OPA
-      uses: open-policy-agent/setup-opa@v2
-      with:
-        version: latest
-
     - name: Terraform install
       uses: hashicorp/setup-terraform@v3
 
@@ -53,18 +48,16 @@ jobs:
 
     - name: Run OPA Authz Policy Check
       id: opa-authz-check
-      run: |
-        opa eval --data .github/workflows/terraform.rego --input tfplan.json "data.terraform.analysis.authz"
+      run: opa eval --data .github/workflows/terraform.rego --input tfplan.json "data.terraform.analysis.authz"
       continue-on-error: false
     
     - name: Run OPA Score Policy Check
       id: opa-score-check
-      run: |
-        opa eval --data .github/workflows/terraform.rego --input tfplan.json "data.terraform.analysis.score"
+      run: opa eval --data .github/workflows/terraform.rego --input tfplan.json "data.terraform.analysis.score"
       continue-on-error: false
 
-    - name: Check OPA Authorization
-      if: steps.opa-check.outcome == 'failure'
+    - name: Check OPA Policy Compliance
+      if: steps.opa-authz-check.outputs.authz_result == 'false'
       run: |
         echo "Terraform plan does not meet policy requirements."
         exit 1
@@ -76,11 +69,6 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
-
-    - name: Setup OPA
-      uses: open-policy-agent/setup-opa@v2
-      with:
-        version: latest
 
     - name: Terraform install
       uses: hashicorp/setup-terraform@v3
