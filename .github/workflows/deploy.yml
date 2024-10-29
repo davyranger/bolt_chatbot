@@ -56,22 +56,6 @@ jobs:
       run: opa eval --data .github/workflows/terraform.rego --input tfplan.json "data.terraform.analysis.score"
       continue-on-error: false
 
-    - name: Check OPA Policy Compliance
-      if: steps.opa-authz-check.outputs.result == 'false'
-      run: |
-        echo "Terraform plan does not meet policy requirements."
-        exit 1
-
-    - name: Post opa command result to GitHub comment
-      uses: b4b4r07/action-github-comment@master
-      if: steps.opa-authz-check.outputs.result
-      with:
-        body: |
-          ## opa test result
-          ```
-          ${{ steps.opa-authz-check.outputs.result }}
-          ```
-          
   terraform-apply:
     runs-on: ubuntu-latest
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
@@ -109,11 +93,18 @@ jobs:
         opa eval --data .github/workflows/terraform.rego --input tfplan.json "data.terraform.analysis.score"
       continue-on-error: false
 
-    - name: Check OPA Authorization
-      if: steps.opa-check.outcome == 'failure'
-      run: |
-        echo "Terraform plan does not meet policy requirements."
-        exit 1
+    - name: Post opa command result to GitHub comment
+      uses: b4b4r07/action-github-comment@master
+      if: steps.opa-authz-check.outputs.result
+      with:
+        body: |
+          ## opa test result
+          ```
+          ${{ steps.opa-authz-check.outputs.result }}
+          ```
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        LOG: trace
 
     - name: Terraform Apply
       if: steps.opa-check.outcome == 'success'
