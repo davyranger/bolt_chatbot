@@ -58,6 +58,7 @@ jobs:
 
     - name: Post opa command result to GitHub comment
       uses: b4b4r07/action-github-comment@master
+      if: steps.opa-authz-check.outputs.result
       with:
         body: |
           ## opa test result
