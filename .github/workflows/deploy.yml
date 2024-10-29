@@ -64,6 +64,9 @@ jobs:
           ```
           ${{ steps.opa-authz-check.outputs.result }}
           ```
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        LOG: trace
           
   terraform-apply:
     runs-on: ubuntu-latest
