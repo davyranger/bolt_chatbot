@@ -124,5 +124,4 @@ jobs:
 
     - name: Push Docker image to ACR
       run: |
-        docker push boltslackbotcontainerregistry.azurecr.io/slack-bot:latest
-        
+        docker push boltslackbotcontainerregistry.azurecr.io/slack-bot:latest 
