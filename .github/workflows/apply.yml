@@ -1,0 +1,93 @@
+name: Azure Deployment Workflow
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "./bolt_chatbot/main.tf"
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  ARM_CLIENT_ID: "${{ secrets.AZURE_CLIENT_ID }}"
+  ARM_SUBSCRIPTION_ID: "${{ secrets.AZURE_SUBSCRIPTION_ID }}"
+  AZURE_CLIENT_SECRET: "${{ secrets.AZURE_CLIENT_SECRET }}"
+  ARM_TENANT_ID: "${{ secrets.AZURE_TENANT_ID }}"
+  SLACK_BOT_TOKEN: "${{ secrets.SLACK_BOT_TOKEN }}"
+  SLACK_APP_TOKEN: "${{ secrets.SLACK_APP_TOKEN }}"
+
+jobs: 
+  terraform-apply:
+      runs-on: ubuntu-latest
+      if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+
+      steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Terraform install
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform Init
+        run: terraform init -reconfigure
+
+      - name: Terraform Plan
+        run: terraform plan -out "tfplan"
+
+      - name: Convert Terraform Plan to JSON
+        run: terraform show -json tfplan | grep '^{.*}$' > tfplan.json
+
+      - name: Setup OPA
+        uses: open-policy-agent/setup-opa@v2
+        with:
+          version: latest
+
+      - name: Run OPA Authz Policy Check
+        id: opa-authz-check
+        run: |
+          result=$(opa eval --data .github/workflows/terraform.rego --input tfplan.json "data.terraform.analysis.authz" --format=json | jq '.result[0].expressions[0].value')
+          echo "result=$result" >> $GITHUB_ENV
+          echo $result
+        continue-on-error: false
+      
+      - name: Run OPA Score Policy Check
+        id: opa-score-check
+        run: |
+          opa eval --data .github/workflows/terraform.rego --input tfplan.json "data.terraform.analysis.score"
+        continue-on-error: false
+      
+      - name: Terraform Apply
+        if: env.result == 'true'
+        run: terraform apply -auto-approve
+
+  docker-build-push:
+      runs-on: ubuntu-latest
+      needs: terraform-apply
+      if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+  
+      steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+  
+      - name: Log in to Azure
+        run: |
+          az login --service-principal -u "${{ secrets.AZURE_CLIENT_ID }}" -p "${{ secrets.AZURE_CLIENT_SECRET }}" --tenant "${{ secrets.AZURE_TENANT_ID }}"
+          az account set --subscription "${{ secrets.AZURE_SUBSCRIPTION_ID }}"
+  
+      - name: Log in to ACR
+        run: |
+          az acr login --name boltslackbotcontainerregistry
+  
+      - name: Build Docker image
+        run: |
+          docker build \
+            --build-arg SLACK_BOT_TOKEN=${{ secrets.SLACK_BOT_TOKEN }} \
+            --build-arg SLACK_APP_TOKEN=${{ secrets.SLACK_APP_TOKEN }} \
+            -t boltslackbotcontainerregistry.azurecr.io/slack-bot:latest .
+  
+      - name: Push Docker image to ACR
+        run: |
+          docker push boltslackbotcontainerregistry.azurecr.io/slack-bot:latest 
