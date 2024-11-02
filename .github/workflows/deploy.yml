@@ -48,7 +48,9 @@ jobs:
 
     - name: Run OPA Authz Policy Check
       id: opa-authz-check
-      run: opa eval --data .github/workflows/terraform.rego --input tfplan.json "data.terraform.analysis.authz"
+      run: |
+        result=$(opa eval --data .github/workflows/terraform.rego --input tfplan.json "data.terraform.analysis.authz" --format=json | jq '.result[0].expressions[0].value')
+        echo $result
       continue-on-error: false
     
     - name: Run OPA Score Policy Check
@@ -86,6 +88,7 @@ jobs:
       run: |
         result=$(opa eval --data .github/workflows/terraform.rego --input tfplan.json "data.terraform.analysis.authz" --format=json | jq '.result[0].expressions[0].value')
         echo "result=$result" >> $GITHUB_ENV
+        echo $result
       continue-on-error: false
     
     - name: Run OPA Score Policy Check
