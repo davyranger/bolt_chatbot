@@ -151,6 +151,5 @@ jobs:
         if: env.result == 'true'
         run: |
           terraform apply \
-            -var="slack_bot_token=${{ secrets.SLACK_BOT_TOKEN }}" \
-            -var="slack_app_token=${{ secrets.SLACK_APP_TOKEN }}" \
             -auto-approve "tfplan"
+      
