@@ -6,7 +6,7 @@ terraform {
     }
   }
 
-  ## Configuration for storing Terraform state remotely in an Azure storage account
+  # Configuration for storing Terraform state remotely in an Azure storage account
   backend "azurerm" {
     resource_group_name  = "rg-terraform-github-actions-state" # Resource group where the storage account is located
     storage_account_name = "tfgithubactions453335"             # Azure Storage account for storing the state file
