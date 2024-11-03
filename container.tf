@@ -24,6 +24,11 @@ data "azurerm_resource_group" "example" {
   name = "slack-bot-rg"
 }
 
+data "azurerm_container_registry" "example" {
+  name                = "boltslackbotcontainerregistry"
+  resource_group_name = "slack-bot-rg"
+}
+
 resource "azurerm_container_group" "example" {
   name                = "boltslackbotgroup"
   location            = data.azurerm_resource_group.example.location
@@ -46,4 +51,10 @@ resource "azurerm_container_group" "example" {
       SLACK_APP_TOKEN = var.slack_app_token
     }
   }
+}
+
+resource "azurerm_role_assignment" "acr_pull" {
+  principal_id         = azurerm_container_group.example.identity.principal_id
+  role_definition_name = "AcrPull"
+  scope                = data.azurerm_container_registry.example.id
 }
