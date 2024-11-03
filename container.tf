@@ -6,7 +6,7 @@ terraform {
     }
   }
 
-  ## Configuration for storing Terraform state remotely in an Azure storage account
+  # Configuration for storing Terraform state remotely in an Azure storage account
   backend "azurerm" {
     resource_group_name  = "rg-terraform-github-actions-state" # Resource group where the storage account is located
     storage_account_name = "tfgithubactions453335"             # Azure Storage account for storing the state file
@@ -23,12 +23,6 @@ provider "azurerm" {
 data "azurerm_resource_group" "example" {
   name = "slack-bot-rg"
 }
-
-data "azurerm_container_registry" "example" {
-  name                = "boltslackbotcontainerregistry"
-  resource_group_name = "slack-bot-rg"
-}
-
 resource "azurerm_container_group" "example" {
   name                = "boltslackbotgroup"
   location            = data.azurerm_resource_group.example.location
@@ -37,7 +31,8 @@ resource "azurerm_container_group" "example" {
   os_type = "Linux"
 
   identity {
-    type = "SystemAssigned"
+    type = "UserAssigned"
+    identity_ids  = [azurerm_user_assigned_identity.managed_identity.id]
   }
 
   container {
@@ -57,8 +52,14 @@ resource "azurerm_container_group" "example" {
   }
 }
 
+resource "azurerm_user_assigned_identity" "managed_identity" {
+  name                = "slackbot"
+  location            = "australiacentral"
+  resource_group_name = data.azurerm_resource_group.example.name
+}
+
 resource "azurerm_role_assignment" "acr_pull" {
-  principal_id         = azurerm_container_group.example.identity[0].principal_id
+  principal_id         = azurerm_user_assigned_identity.managed_identity.principal_id
   role_definition_name = "AcrPull"
-  scope                = data.azurerm_container_registry.example.id
+  scope                = azurerm_container_group.example.id
 }
