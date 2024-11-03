@@ -12,12 +12,15 @@ blast_radius = 50
 # weights assigned for each operation on each resource-type
 weights = {
     "azurerm_resource_group": {"delete": 100, "create": 10, "modify": 1},
-    "azurerm_container_registry": {"delete": 10, "create": 1, "modify": 1}
+    "azurerm_container_registry": {"delete": 10, "create": 1, "modify": 1},
+    "azurerm_container_group": {"delete": 10, "create": 1, "modify": 1}
 }
 
 # Consider exactly these resource types in calculations
 resource_types = {
-    "azurerm_resource_group", "azurerm_container_registry"
+    "azurerm_resource_group",
+    "azurerm_container_registry",
+    "azurerm_container_group"
 }
 
 #########
