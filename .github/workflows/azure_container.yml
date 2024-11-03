@@ -38,8 +38,6 @@ jobs:
           sparse-checkout: |
             /*
             !/main.tf
-            !/variables.tf
-
           sparse-checkout-cone-mode: false
 
       - name: Terraform install
