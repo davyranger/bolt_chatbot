@@ -56,7 +56,7 @@ resource "azurerm_container_group" "example" {
 resource "azurerm_role_assignment" "acr_pull" {
   principal_id         = azurerm_container_group.example.identity[0].principal_id
   role_definition_name = "AcrPull"
-  scope                = azurerm_container_registry.example.id
+  scope                = data.azurerm_container_registry.example.id
 
   depends_on = [
     azurerm_container_group.example
