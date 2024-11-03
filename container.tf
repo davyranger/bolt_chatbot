@@ -15,6 +15,10 @@ terraform {
     use_oidc             = true                                # Enable OIDC for authentication with Azure
   }
 }
+provider "azurerm" {
+  features {}     # Enables the use of the AzureRM provider without additional config
+  use_oidc = true # OIDC authentication with Azure (useful for GitHub Actions)
+}
 
 data "azurerm_resource_group" "example" {
   name = "slack-bot-rg"
