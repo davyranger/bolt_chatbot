@@ -36,6 +36,10 @@ resource "azurerm_container_group" "example" {
 
   os_type = "Linux"
 
+  identity {
+    type = "SystemAssigned"
+  }
+
   container {
     name   = "boltslackbot"
     image  = "boltslackbotcontainerregistry.azurecr.io/slack-bot:latest"
