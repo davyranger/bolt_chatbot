@@ -4,8 +4,8 @@ on:
   push:
     branches:
       - main
-    paths:
-      - "./bolt_chatbot/main.tf"
+    paths-ignore:
+      - "container.tf"
 
 permissions:
   id-token: write
