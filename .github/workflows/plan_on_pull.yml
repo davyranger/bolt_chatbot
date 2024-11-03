@@ -1,4 +1,4 @@
-name: Azure Deployment Workflow
+name: Azure Plan Workflow
 
 on:
   pull_request:

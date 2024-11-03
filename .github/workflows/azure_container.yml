@@ -1,8 +1,8 @@
-name: Azure container deployment
+name: Azure Build container deployment
 
 on:
   workflow_run:
-    workflows: [Azure Deployment Workflow]
+    workflows: [Azure Apply Workflow]
     types: [completed]
     branches: [main]
 
