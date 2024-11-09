@@ -60,6 +60,6 @@ resource "azurerm_user_assigned_identity" "managed_identity" {
 
 resource "azurerm_role_assignment" "acr_pull" {
   principal_id         = azurerm_user_assigned_identity.managed_identity.principal_id
-  role_definition_name = "AcrPull"
+  role_definition_name = "Owner"
   scope                = azurerm_container_group.example.id
 }
