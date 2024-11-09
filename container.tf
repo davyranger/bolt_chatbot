@@ -1,48 +1,58 @@
 terraform {
   required_providers {
     azurerm = {
-      source  = "hashicorp/azurerm" # Specify the Azure provider source and version
-      version = ">= 3.7.0"          # Minimum required version of AzureRM provider
+      source  = "hashicorp/azurerm"
+      version = ">= 3.7.0"
     }
   }
 
-  # Configuration for storing Terraform state remotely in an Azure storage account
   backend "azurerm" {
-    resource_group_name  = "rg-terraform-github-actions-state" # Resource group where the storage account is located
-    storage_account_name = "tfgithubactions453335"             # Azure Storage account for storing the state file
-    container_name       = "boltslackbotcontainer"             # Blob container where the state file will be stored
-    key                  = "terraform.tfstate"                 # Name of the Terraform state file
-    use_oidc             = true                                # Enable OIDC for authentication with Azure
+    resource_group_name  = "rg-terraform-github-actions-state"
+    storage_account_name = "tfgithubactions453335"
+    container_name       = "boltslackbotcontainer"
+    key                  = "terraform.tfstate"
+    use_oidc             = true
   }
 }
+
 provider "azurerm" {
-  features {}     # Enables the use of the AzureRM provider without additional config
-  use_oidc = true # OIDC authentication with Azure (useful for GitHub Actions)
+  features {}
+  use_oidc = true
 }
 
+# Resource Group Data Source
 data "azurerm_resource_group" "example" {
   name = "slack-bot-rg"
 }
 
+# Container Registry Data Source
 data "azurerm_container_registry" "example" {
   name                = "boltslackbotcontainerregistry"
   resource_group_name = data.azurerm_resource_group.example.name
 }
+
+# Managed Identity
+resource "azurerm_user_assigned_identity" "managed_identity" {
+  name                = "slackbot-identity"
+  location            = data.azurerm_resource_group.example.location
+  resource_group_name = data.azurerm_resource_group.example.name
+}
+
+# Container Group
 resource "azurerm_container_group" "example" {
   name                = "boltslackbotgroup"
   location            = data.azurerm_resource_group.example.location
   resource_group_name = data.azurerm_resource_group.example.name
-
-  os_type = "Linux"
+  os_type             = "Linux"
 
   identity {
-    type = "UserAssigned"
-    identity_ids  = [azurerm_user_assigned_identity.managed_identity.id]
+    type         = "UserAssigned"
+    identity_ids = [azurerm_user_assigned_identity.managed_identity.id]
   }
 
   container {
     name   = "boltslackbot"
-    image  = "boltslackbotcontainerregistry.azurecr.io/slack-bot:latest"
+    image  = "${data.azurerm_container_registry.example.login_server}/slack-bot:latest"
     cpu    = "1.0"
     memory = "1.5"
 
@@ -57,14 +67,27 @@ resource "azurerm_container_group" "example" {
   }
 }
 
-resource "azurerm_user_assigned_identity" "managed_identity" {
-  name                = "slackbot"
-  location            = "australiacentral"
-  resource_group_name = data.azurerm_resource_group.example.name
-}
-
+# Role Assignment for ACR Pull Permission
 resource "azurerm_role_assignment" "acr_pull" {
   principal_id         = azurerm_user_assigned_identity.managed_identity.principal_id
   role_definition_name = "AcrPull"
   scope                = data.azurerm_container_registry.example.id
+}
+
+# Custom Role Definition (If Required)
+resource "azurerm_role_definition" "custom_role_definition" {
+  name               = "RoleAssignmentContributor"
+  scope              = data.azurerm_resource_group.example.id
+  description        = "Custom role with permissions to manage role assignments"
+  permissions {
+    actions = [
+      "Microsoft.Authorization/roleAssignments/write",
+      "Microsoft.Authorization/roleAssignments/delete",
+    ]
+    not_actions = []
+  }
+
+  assignable_scopes = [
+    data.azurerm_resource_group.example.id
+  ]
 }
