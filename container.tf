@@ -23,6 +23,11 @@ provider "azurerm" {
 data "azurerm_resource_group" "example" {
   name = "slack-bot-rg"
 }
+
+data "azurerm_container_registry" "example" {
+  name                = "boltslackbotcontainerregistry"
+  resource_group_name = data.azurerm_resource_group.example.name
+}
 resource "azurerm_container_group" "example" {
   name                = "boltslackbotgroup"
   location            = data.azurerm_resource_group.example.location
@@ -61,5 +66,5 @@ resource "azurerm_user_assigned_identity" "managed_identity" {
 resource "azurerm_role_assignment" "acr_pull" {
   principal_id         = azurerm_user_assigned_identity.managed_identity.principal_id
   role_definition_name = "Owner"
-  scope                = azurerm_container_group.example.id
+  scope                = data.azurerm_container_registry.example.id
 }
