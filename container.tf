@@ -88,6 +88,7 @@ resource "azurerm_role_definition" "custom_role_definition" {
   }
 
   assignable_scopes = [
-    data.azurerm_resource_group.example.id
+    data.azurerm_resource_group.example.id,
+    data.azurerm_container_registry.example.id
   ]
 }
