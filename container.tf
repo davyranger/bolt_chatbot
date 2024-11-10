@@ -4,6 +4,10 @@ terraform {
       source  = "hashicorp/azurerm"
       version = ">= 3.7.0"
     }
+    azuread = {
+      source  = "hashicorp/azuread"
+      version = ">= 2.0"
+    }
   }
 
   backend "azurerm" {
@@ -13,6 +17,10 @@ terraform {
     key                  = "terraform.tfstate"
     use_oidc             = true
   }
+}
+
+provider "azuread" {
+  use_oidc = true
 }
 
 provider "azurerm" {
