@@ -34,13 +34,13 @@ data "azurerm_container_registry" "example" {
 data "azurerm_client_config" "current" {}
 
 # Reference existing Azure AD Application
-data "azurerm_azuread_application" "existing_app" {
-  application_id = "873d8905-7172-4080-8a76-1fb9eaf0e2af" # Replace with your existing app registration ID
+data "azuread_application" "existing_app" {
+  display_name = "github-actions-terraform-authenticate" # Replace with your existing app registration ID
 }
 
 # Create Service Principal for ACR Pull
-resource "azurerm_azuread_service_principal" "sp" {
-  application_id = data.azurerm_azuread_application.existing_app.application_id
+resource "azuread_service_principal" "sp" {
+  client_id = data.azuread_application.existing_app.client_id
 }
 
 # Generate password for Service Principal
@@ -49,16 +49,15 @@ resource "random_password" "sp_password" {
   special = true
 }
 
-resource "azurerm_azuread_service_principal_password" "sp_password" {
-  service_principal_id = azurerm_azuread_service_principal.sp.id
+resource "azuread_service_principal_password" "sp_password" {
+  service_principal_id = azuread_service_principal.sp.id
   value                = random_password.sp_password.result
   end_date             = "2025-01-01T00:00:00Z"
 }
 
 # Role Assignment for ACR Pull Permission
 resource "azurerm_role_assignment" "acr_pull" {
-  principal_id         = azurerm_azuread_service_principal.sp.id
-  role_definition_name = "AcrPull"
+  principal_id         = azuread_service_principal.sp.id
   scope                = data.azurerm_container_registry.example.id
 }
 
@@ -73,14 +72,14 @@ resource "azurerm_key_vault" "example" {
 
 resource "azurerm_key_vault_secret" "sp_password_secret" {
   name         = "slackbot-acr-pull-pwd"
-  value        = azurerm_azuread_service_principal_password.sp_password.value
+  value        = azuread_service_principal_password.sp_password.value
   key_vault_id = azurerm_key_vault.example.id
 }
 
 # Store Service Principal ID in Key Vault
 resource "azurerm_key_vault_secret" "sp_id_secret" {
   name         = "slackbot-acr-pull-usr"
-  value        = azurerm_azuread_service_principal.sp.application_id
+  value        = azuread_service_principal.sp.application_id
   key_vault_id = azurerm_key_vault.example.id
 }
 
@@ -120,8 +119,8 @@ resource "azurerm_container_group" "example" {
   }
 
   image_registry_credential {
-    username = azurerm_azuread_service_principal.sp.application_id
-    password = azurerm_azuread_service_principal_password.sp_password.value
+    username = azuread_service_principal.sp.application_id
+    password = azuread_service_principal_password.sp_password.value
     server   = data.azurerm_container_registry.example.login_server
   }
 }
