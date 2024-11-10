@@ -51,6 +51,12 @@ resource "azuread_service_principal" "sp" {
   client_id = data.azuread_application.existing_app.client_id
 }
 
+resource "azurerm_role_assignment" "resource_group_contributor" {
+  principal_id         = azuread_service_principal.sp.id
+  role_definition_name = "Contributor"
+  scope                = data.azurerm_resource_group.example.id
+}
+
 # Generate password for Service Principal
 resource "random_password" "sp_password" {
   length  = 16
