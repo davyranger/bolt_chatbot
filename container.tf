@@ -49,10 +49,14 @@ resource "random_password" "sp_password" {
   special = true
 }
 
+resource "time_rotating" "example" {
+  rotation_days = 7
+}
 resource "azuread_service_principal_password" "sp_password" {
   service_principal_id = azuread_service_principal.sp.id
-  value                = random_password.sp_password.result
-  end_date             = "2025-01-01T00:00:00Z"
+  rotate_when_changed = {
+    rotation = time_rotating.example.id
+  }
 }
 
 # Role Assignment for ACR Pull Permission
@@ -79,7 +83,7 @@ resource "azurerm_key_vault_secret" "sp_password_secret" {
 # Store Service Principal ID in Key Vault
 resource "azurerm_key_vault_secret" "sp_id_secret" {
   name         = "slackbot-acr-pull-usr"
-  value        = azuread_service_principal.sp.application_id
+  value        = data.azuread_application.existing_app.client_id
   key_vault_id = azurerm_key_vault.example.id
 }
 
