@@ -31,6 +31,59 @@ data "azurerm_container_registry" "example" {
   resource_group_name = data.azurerm_resource_group.example.name
 }
 
+data "azurerm_client_config" "current" {}
+
+# Reference existing Azure AD Application
+data "azurerm_azuread_application" "existing_app" {
+  application_id = "873d8905-7172-4080-8a76-1fb9eaf0e2af" # Replace with your existing app registration ID
+}
+
+# Create Service Principal for ACR Pull
+resource "azurerm_azuread_service_principal" "sp" {
+  application_id = data.azurerm_azuread_application.existing_app.application_id
+}
+
+# Generate password for Service Principal
+resource "random_password" "sp_password" {
+  length  = 16
+  special = true
+}
+
+resource "azurerm_azuread_service_principal_password" "sp_password" {
+  service_principal_id = azurerm_azuread_service_principal.sp.id
+  value                = random_password.sp_password.result
+  end_date             = "2025-01-01T00:00:00Z"
+}
+
+# Role Assignment for ACR Pull Permission
+resource "azurerm_role_assignment" "acr_pull" {
+  principal_id         = azurerm_azuread_service_principal.sp.id
+  role_definition_name = "AcrPull"
+  scope                = data.azurerm_container_registry.example.id
+}
+
+# Store Service Principal Password in Key Vault
+resource "azurerm_key_vault" "example" {
+  name                = "mykeyvault"
+  location            = data.azurerm_resource_group.example.location
+  resource_group_name = data.azurerm_resource_group.example.name
+  sku_name            = "standard"
+  tenant_id           = data.azurerm_client_config.current.tenant_id
+}
+
+resource "azurerm_key_vault_secret" "sp_password_secret" {
+  name         = "slackbot-acr-pull-pwd"
+  value        = azurerm_azuread_service_principal_password.sp_password.value
+  key_vault_id = azurerm_key_vault.example.id
+}
+
+# Store Service Principal ID in Key Vault
+resource "azurerm_key_vault_secret" "sp_id_secret" {
+  name         = "slackbot-acr-pull-usr"
+  value        = azurerm_azuread_service_principal.sp.application_id
+  key_vault_id = azurerm_key_vault.example.id
+}
+
 # Managed Identity
 resource "azurerm_user_assigned_identity" "managed_identity" {
   name                = "slackbot-identity"
@@ -65,20 +118,19 @@ resource "azurerm_container_group" "example" {
       SLACK_APP_TOKEN = var.slack_app_token
     }
   }
-}
 
-# Role Assignment for ACR Pull Permission
-resource "azurerm_role_assignment" "acr_pull" {
-  principal_id         = azurerm_user_assigned_identity.managed_identity.principal_id
-  role_definition_name = "AcrPull"
-  scope                = data.azurerm_container_registry.example.id
+  image_registry_credential {
+    username = azurerm_azuread_service_principal.sp.application_id
+    password = azurerm_azuread_service_principal_password.sp_password.value
+    server   = data.azurerm_container_registry.example.login_server
+  }
 }
 
 # Custom Role Definition (If Required)
 resource "azurerm_role_definition" "custom_role_definition" {
-  name               = "RoleAssignmentContributor"
-  scope              = data.azurerm_resource_group.example.id
-  description        = "Custom role with permissions to manage role assignments"
+  name        = "RoleAssignmentContributor"
+  scope       = data.azurerm_resource_group.example.id
+  description = "Custom role with permissions to manage role assignments"
   permissions {
     actions = [
       "Microsoft.Authorization/roleAssignments/write",
