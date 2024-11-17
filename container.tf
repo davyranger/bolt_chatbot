@@ -84,18 +84,8 @@ resource "azurerm_role_assignment" "acr_pull" {
 #   tenant_id           = data.azurerm_client_config.current.tenant_id
 # }
 
-import {
-  to = azurerm_key_vault_access_policy.sp_access_policy
-  id = "/subscriptions/6dff3615-67d2-4569-888e-fd5c5a829acb/resourceGroups/slack-bot-rg/providers/Microsoft.KeyVault/vaults/davysslackbotkeyvault/objectId/71fdc874-cc03-4e4f-b597-2de49c07589f"
-}
-
-import {
-  to = azurerm_key_vault_secret.sp_id_secret 
-  id = "/subscriptions/6dff3615-67d2-4569-888e-fd5c5a829acb/resourceGroups/slack-bot-rg/providers/Microsoft.KeyVault/vaults/davysslackbotkeyvault/secrets/slackbot-acr-pull-usr"
-}
 
 # Store Service Principal ID in Key Vault
-<<<<<<< HEAD
 # resource "azurerm_key_vault_secret" "sp_id_secret" {
 #   name         = "slackbot-acr-pull-usr"
 #   value        = data.azuread_service_principal.sp.id
@@ -112,24 +102,6 @@ import {
 #     "Set"
 #   ]
 # }
-=======
-resource "azurerm_key_vault_secret" "sp_id_secret" {
-  name         = "slackbot-acr-pull-usr"
-  value        = data.azuread_service_principal.sp.id
-  key_vault_id = azurerm_key_vault.example.id
-}
-resource "azurerm_key_vault_access_policy" "sp_access_policy" {
-  key_vault_id = azurerm_key_vault.example.id
-  tenant_id    = data.azurerm_client_config.current.tenant_id
-  object_id    = data.azuread_service_principal.sp.object_id
-
-  secret_permissions = [
-    "Get",
-    "List",
-    "Set"
-  ]
-}
->>>>>>> 1c3400a824a1da8f3ef3e41f81dd6a08e7043518
 
 # Managed Identity
 resource "azurerm_user_assigned_identity" "managed_identity" {
