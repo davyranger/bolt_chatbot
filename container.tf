@@ -128,7 +128,7 @@ resource "azurerm_container_group" "example" {
       SLACK_APP_TOKEN = var.slack_app_token
     }
   }
-
+  # az acr credential show --name boltslackbotcontainerregistry
   image_registry_credential {
     username = var.acr_username
     password = var.acr_password
