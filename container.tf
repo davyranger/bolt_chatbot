@@ -50,6 +50,14 @@ resource "azurerm_role_assignment" "resource_group_contributor" {
   scope                = data.azurerm_resource_group.example.id
 }
 
+# Assign Azure AD roles to allow the service principal to manage credentials
+resource "azuread_role_assignment" "sp_credentials_admin" {
+  principal_object_id = data.azuread_service_principal.sp.id
+  role_definition_name = "Application Administrator"  # Or another role like "Global Administrator"
+  scope = "/"
+}
+
+
 # Generate password for Service Principal
 resource "random_password" "sp_password" {
   length  = 16
