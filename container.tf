@@ -45,7 +45,7 @@ data "azuread_service_principal" "sp" {
   object_id = "71fdc874-cc03-4e4f-b597-2de49c07589f"
 }
 resource "azurerm_role_assignment" "resource_group_contributor" {
-  principal_id         = data.azuread_service_principal.sp.id
+  principal_id         = data.azuread_service_principal.sp.object_id
   role_definition_name = "Owner"
   scope                = data.azurerm_resource_group.example.id
 }
@@ -68,7 +68,7 @@ resource "azuread_service_principal_password" "sp_password" {
 
 # Role Assignment for ACR Pull Permission
 resource "azurerm_role_assignment" "acr_pull" {
-  principal_id = data.azuread_service_principal.sp.id
+  principal_id = data.azuread_service_principal.sp.object_id
   role_definition_name = "AcrPull"
   scope        = data.azurerm_container_registry.example.id
 }
