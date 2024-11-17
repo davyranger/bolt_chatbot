@@ -16,6 +16,8 @@ env:
   ARM_TENANT_ID: "${{ secrets.AZURE_TENANT_ID }}"
   SLACK_BOT_TOKEN: "${{ secrets.SLACK_BOT_TOKEN }}"
   SLACK_APP_TOKEN: "${{ secrets.SLACK_APP_TOKEN }}"
+  ACR_USERNAME: "${{ secrets.ACR_USERNAME }}"
+  ACR_PASSWORD: "${{ secrets.ACR_PASSWORD }}"
 
 jobs: 
   terraform-apply:
@@ -149,6 +151,9 @@ jobs:
 
       - name: Terraform Apply
         if: env.result == 'true'
+        env:
+          ACR_USERNAME: ${{ secrets.ACR_USERNAME }}
+          ACR_PASSWORD: ${{ secrets.ACR_PASSWORD }}
         run: |
           terraform apply \
             -auto-approve "tfplan"
