@@ -50,7 +50,7 @@ resource "azuread_service_principal" "sp" {
   client_id = data.azuread_application.existing_app.client_id
 }
 resource "azurerm_role_assignment" "resource_group_contributor" {
-  principal_id         = data.azuread_application.existing_app.client_id
+  principal_id         = azuread_service_principal.sp.id
   role_definition_name = "Contributor"
   scope                = data.azurerm_resource_group.example.id
 }
@@ -65,7 +65,7 @@ resource "time_rotating" "example" {
   rotation_days = 7
 }
 resource "azuread_service_principal_password" "sp_password" {
-  service_principal_id = data.azuread_application.existing_app.client_id
+  service_principal_id = azuread_service_principal.sp.id
   rotate_when_changed = {
     rotation = time_rotating.example.id
   }
@@ -73,7 +73,7 @@ resource "azuread_service_principal_password" "sp_password" {
 
 # Role Assignment for ACR Pull Permission
 resource "azurerm_role_assignment" "acr_pull" {
-  principal_id = data.azuread_application.existing_app.client_id
+  principal_id = azuread_service_principal.sp.id
   scope        = data.azurerm_container_registry.example.id
 }
 
@@ -135,7 +135,7 @@ resource "azurerm_container_group" "example" {
   }
 
   image_registry_credential {
-    username = data.azuread_application.existing_app.client_id
+    username = azuread_service_principal.sp.id
     password = azuread_service_principal_password.sp_password.value
     server   = data.azurerm_container_registry.example.login_server
   }
