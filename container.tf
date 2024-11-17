@@ -49,17 +49,6 @@ resource "azurerm_role_assignment" "resource_group_contributor" {
   role_definition_name = "Owner"
   scope                = data.azurerm_resource_group.example.id
 }
-resource "time_rotating" "example" {
-  rotation_days = 7
-}
-resource "azuread_service_principal_password" "sp_password" {
-  service_principal_id = data.azuread_service_principal.sp.id
-  rotate_when_changed = {
-    rotation = time_rotating.example.id
-  }
-  start_date = time_rotating.example.rfc3339          # Use the base timestamp as the start date
-  end_date   = time_rotating.example.rotation_rfc3339 # Use the rotation timestamp as the end date
-}
 
 # Role Assignment for ACR Pull Permission
 resource "azurerm_role_assignment" "acr_pull" {
@@ -75,12 +64,6 @@ resource "azurerm_key_vault" "example" {
   resource_group_name = data.azurerm_resource_group.example.name
   sku_name            = "standard"
   tenant_id           = data.azurerm_client_config.current.tenant_id
-}
-
-resource "azurerm_key_vault_secret" "sp_password_secret" {
-  name         = "slackbot-acr-pull-pwd"
-  value        = azuread_service_principal_password.sp_password.value
-  key_vault_id = azurerm_key_vault.example.id
 }
 
 # Store Service Principal ID in Key Vault
