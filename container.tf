@@ -102,7 +102,8 @@ resource "azurerm_key_vault_access_policy" "sp_access_policy" {
 
   secret_permissions = [
     "Get",
-    "List"
+    "List",
+    "Set"
   ]
 }
 
