@@ -69,6 +69,7 @@ resource "azuread_service_principal_password" "sp_password" {
 # Role Assignment for ACR Pull Permission
 resource "azurerm_role_assignment" "acr_pull" {
   principal_id = data.azuread_service_principal.sp.id
+  role_definition_name = "ArcPull"
   scope        = data.azurerm_container_registry.example.id
 }
 
