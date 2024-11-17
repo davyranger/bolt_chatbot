@@ -81,7 +81,7 @@ resource "azurerm_role_assignment" "acr_pull" {
 
 # Store Service Principal Password in Key Vault
 resource "azurerm_key_vault" "example" {
-  name                = "mykeyvault"
+  name                = "slackbotkeyvault"
   location            = data.azurerm_resource_group.example.location
   resource_group_name = data.azurerm_resource_group.example.name
   sku_name            = "standard"
