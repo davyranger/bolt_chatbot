@@ -4,10 +4,6 @@ terraform {
       source  = "hashicorp/azurerm"
       version = ">= 3.7.0"
     }
-    azuread = {
-      source  = "hashicorp/azuread"
-      version = ">= 2.0"
-    }
   }
 
   backend "azurerm" {
@@ -17,10 +13,6 @@ terraform {
     key                  = "terraform.tfstate"
     use_oidc             = true
   }
-}
-
-provider "azuread" {
-  use_oidc = true
 }
 
 provider "azurerm" {
@@ -46,13 +38,9 @@ data "azuread_application" "existing_app" {
   display_name = "github-actions-terraform-authenticate" # Replace with your existing app registration ID
 }
 
+# Create Service Principal for ACR Pull
 resource "azuread_service_principal" "sp" {
   client_id = data.azuread_application.existing_app.client_id
-}
-resource "azurerm_role_assignment" "resource_group_contributor" {
-  principal_id         = data.azuread_application.existing_app.client_id
-  role_definition_name = "Contributor"
-  scope                = data.azurerm_resource_group.example.id
 }
 
 # Generate password for Service Principal
@@ -61,25 +49,22 @@ resource "random_password" "sp_password" {
   special = true
 }
 
-resource "time_rotating" "example" {
-  rotation_days = 7
-}
 resource "azuread_service_principal_password" "sp_password" {
-  service_principal_id = data.azuread_application.existing_app.client_id
-  rotate_when_changed = {
-    rotation = time_rotating.example.id
-  }
+  service_principal_id = azuread_service_principal.sp.id
+  value                = random_password.sp_password.result
+  end_date             = "2025-01-01T00:00:00Z"
 }
 
 # Role Assignment for ACR Pull Permission
 resource "azurerm_role_assignment" "acr_pull" {
-  principal_id = data.azuread_application.existing_app.client_id
-  scope        = data.azurerm_container_registry.example.id
+  principal_id         = azuread_service_principal.sp.id
+  role_definition_name = "AcrPull"
+  scope                = data.azurerm_container_registry.example.id
 }
 
 # Store Service Principal Password in Key Vault
 resource "azurerm_key_vault" "example" {
-  name                = "davysslackbotkeyvault"
+  name                = "mykeyvault"
   location            = data.azurerm_resource_group.example.location
   resource_group_name = data.azurerm_resource_group.example.name
   sku_name            = "standard"
@@ -95,7 +80,7 @@ resource "azurerm_key_vault_secret" "sp_password_secret" {
 # Store Service Principal ID in Key Vault
 resource "azurerm_key_vault_secret" "sp_id_secret" {
   name         = "slackbot-acr-pull-usr"
-  value        = data.azuread_application.existing_app.client_id
+  value        = azuread_service_principal.sp.application_id
   key_vault_id = azurerm_key_vault.example.id
 }
 
@@ -135,7 +120,7 @@ resource "azurerm_container_group" "example" {
   }
 
   image_registry_credential {
-    username = data.azuread_application.existing_app.client_id
+    username = azuread_service_principal.sp.application_id
     password = azuread_service_principal_password.sp_password.value
     server   = data.azurerm_container_registry.example.login_server
   }
