@@ -46,7 +46,7 @@ data "azuread_service_principal" "sp" {
 }
 resource "azurerm_role_assignment" "resource_group_contributor" {
   principal_id         = data.azuread_service_principal.sp.id
-  role_definition_name = "Application Administrator"
+  role_definition_name = "Owner"
   scope                = data.azurerm_resource_group.example.id
 }
 
