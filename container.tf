@@ -57,6 +57,8 @@ resource "azuread_service_principal_password" "sp_password" {
   rotate_when_changed = {
     rotation = time_rotating.example.id
   }
+  start_date = time_rotating.example.rfc3339  # Use the base timestamp as the start date
+  end_date   = time_rotating.example.rotation_rfc3339  # Use the rotation timestamp as the end date
 }
 
 # Role Assignment for ACR Pull Permission
