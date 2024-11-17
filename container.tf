@@ -42,18 +42,18 @@ data "azurerm_container_registry" "example" {
 data "azurerm_client_config" "current" {}
 
 # Reference existing Azure AD Application
-# data "azuread_application" "existing_app" {
-#   display_name = "github-actions-terraform-authenticate" # Replace with your existing app registration ID
-# }
+data "azuread_application" "existing_app" {
+  display_name = "github-actions-terraform-authenticate" # Replace with your existing app registration ID
+}
+resource "azuread_service_principal" "sp" {
+  client_id = data.azuread_application.existing_app.client_id
+}
 
 import {
   to = azuread_service_principal.sp
   id = "71fdc874-cc03-4e4f-b597-2de49c07589f"
 }
 
-resource "azuread_service_principal" "sp" {
-  client_id = ""
-}
 resource "azurerm_role_assignment" "resource_group_contributor" {
   principal_id         = azuread_service_principal.sp.id
   role_definition_name = "Contributor"
