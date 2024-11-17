@@ -28,7 +28,7 @@ provider "azurerm" {
   use_oidc = true
 }
 
-# Resource Group Data Source
+## Resource Group Data Source
 data "azurerm_resource_group" "example" {
   name = "slack-bot-rg"
 }
