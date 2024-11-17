@@ -41,16 +41,11 @@ data "azurerm_container_registry" "example" {
 
 data "azurerm_client_config" "current" {}
 
-#Reference existing Azure AD Application
-data "azuread_application" "existing_app" {
-  display_name = "github-actions-terraform-authenticate" # Replace with your existing app registration ID
+data "azuread_service_principal" "sp" {
+  object_id = "71fdc874-cc03-4e4f-b597-2de49c07589f"
 }
-resource "azuread_service_principal" "sp" {
-  client_id = data.azuread_application.existing_app.client_id
-}
-
 resource "azurerm_role_assignment" "resource_group_contributor" {
-  principal_id         = azuread_service_principal.sp.id
+  principal_id         = data.azuread_service_principal.sp.id
   role_definition_name = "Contributor"
   scope                = data.azurerm_resource_group.example.id
 }
@@ -65,7 +60,7 @@ resource "time_rotating" "example" {
   rotation_days = 7
 }
 resource "azuread_service_principal_password" "sp_password" {
-  service_principal_id = azuread_service_principal.sp.id
+  service_principal_id = data.azuread_service_principal.sp.id
   rotate_when_changed = {
     rotation = time_rotating.example.id
   }
@@ -73,7 +68,7 @@ resource "azuread_service_principal_password" "sp_password" {
 
 # Role Assignment for ACR Pull Permission
 resource "azurerm_role_assignment" "acr_pull" {
-  principal_id = azuread_service_principal.sp.id
+  principal_id = data.azuread_service_principal.sp.id
   scope        = data.azurerm_container_registry.example.id
 }
 
@@ -95,7 +90,7 @@ resource "azurerm_key_vault_secret" "sp_password_secret" {
 # Store Service Principal ID in Key Vault
 resource "azurerm_key_vault_secret" "sp_id_secret" {
   name         = "slackbot-acr-pull-usr"
-  value        = azuread_service_principal.sp.id
+  value        = data.azuread_service_principal.sp.id
   key_vault_id = azurerm_key_vault.example.id
 }
 
@@ -135,7 +130,7 @@ resource "azurerm_container_group" "example" {
   }
 
   image_registry_credential {
-    username = azuread_service_principal.sp.id
+    username = data.azuread_service_principal.sp.id
     password = azuread_service_principal_password.sp_password.value
     server   = data.azurerm_container_registry.example.login_server
   }
