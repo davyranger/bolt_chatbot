@@ -57,11 +57,11 @@ resource "azuread_service_principal_password" "sp_password" {
   end_date   = time_rotating.example.rotation_rfc3339 # Use the rotation timestamp as the end date
 }
 
-resource "azurerm_key_vault_secret" "sp_password_secret" {
-  name         = "slackbot-acr-pull-pwd"
-  value        = azuread_service_principal_password.sp_password.value
-  key_vault_id = azurerm_key_vault.example.id
-}
+# resource "azurerm_key_vault_secret" "sp_password_secret" {
+#   name         = "slackbot-acr-pull-pwd"
+#   value        = azuread_service_principal_password.sp_password.value
+#   key_vault_id = azurerm_key_vault.example.id
+# }
 resource "azurerm_role_assignment" "resource_group_contributor" {
   principal_id         = data.azuread_service_principal.sp.object_id
   role_definition_name = "Owner"
@@ -76,13 +76,13 @@ resource "azurerm_role_assignment" "acr_pull" {
 }
 
 # Store Service Principal Password in Key Vault
-resource "azurerm_key_vault" "example" {
-  name                = "davysslackbotkeyvault"
-  location            = data.azurerm_resource_group.example.location
-  resource_group_name = data.azurerm_resource_group.example.name
-  sku_name            = "standard"
-  tenant_id           = data.azurerm_client_config.current.tenant_id
-}
+# resource "azurerm_key_vault" "example" {
+#   name                = "davysslackbotkeyvault"
+#   location            = data.azurerm_resource_group.example.location
+#   resource_group_name = data.azurerm_resource_group.example.name
+#   sku_name            = "standard"
+#   tenant_id           = data.azurerm_client_config.current.tenant_id
+# }
 
 import {
   to = azurerm_key_vault_access_policy.sp_access_policy
@@ -95,6 +95,24 @@ import {
 }
 
 # Store Service Principal ID in Key Vault
+<<<<<<< HEAD
+# resource "azurerm_key_vault_secret" "sp_id_secret" {
+#   name         = "slackbot-acr-pull-usr"
+#   value        = data.azuread_service_principal.sp.id
+#   key_vault_id = azurerm_key_vault.example.id
+# }
+# resource "azurerm_key_vault_access_policy" "sp_access_policy" {
+#   key_vault_id = azurerm_key_vault.example.id
+#   tenant_id    = data.azurerm_client_config.current.tenant_id
+#   object_id    = data.azuread_service_principal.sp.object_id
+
+#   secret_permissions = [
+#     "Get",
+#     "List",
+#     "Set"
+#   ]
+# }
+=======
 resource "azurerm_key_vault_secret" "sp_id_secret" {
   name         = "slackbot-acr-pull-usr"
   value        = data.azuread_service_principal.sp.id
@@ -111,6 +129,7 @@ resource "azurerm_key_vault_access_policy" "sp_access_policy" {
     "Set"
   ]
 }
+>>>>>>> 1c3400a824a1da8f3ef3e41f81dd6a08e7043518
 
 # Managed Identity
 resource "azurerm_user_assigned_identity" "managed_identity" {
