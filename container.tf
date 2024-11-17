@@ -95,6 +95,17 @@ resource "azurerm_key_vault_secret" "sp_id_secret" {
   key_vault_id = azurerm_key_vault.example.id
 }
 
+resource "azurerm_key_vault_access_policy" "sp_access_policy" {
+  key_vault_id = azurerm_key_vault.example.id
+  tenant_id    = data.azurerm_client_config.current.tenant_id
+  object_id    = data.azuread_service_principal.sp.id
+
+  secret_permissions = [
+    "get",
+    "list"
+  ]
+}
+
 # Managed Identity
 resource "azurerm_user_assigned_identity" "managed_identity" {
   name                = "slackbot-identity"
