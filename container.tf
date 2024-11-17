@@ -49,7 +49,6 @@ resource "azurerm_role_assignment" "resource_group_contributor" {
   role_definition_name = "Owner"
   scope                = data.azurerm_resource_group.example.id
 }
-
 resource "time_rotating" "example" {
   rotation_days = 7
 }
