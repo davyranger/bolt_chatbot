@@ -101,8 +101,8 @@ resource "azurerm_key_vault_access_policy" "sp_access_policy" {
   object_id    = data.azuread_service_principal.sp.id
 
   secret_permissions = [
-    "get",
-    "list"
+    "Get",
+    "List"
   ]
 }
 
