@@ -44,6 +44,24 @@ data "azurerm_client_config" "current" {}
 data "azuread_service_principal" "sp" {
   object_id = "71fdc874-cc03-4e4f-b597-2de49c07589f"
 }
+
+resource "time_rotating" "example" {
+  rotation_days = 7
+}
+resource "azuread_service_principal_password" "sp_password" {
+  service_principal_id = data.azuread_service_principal.sp.id
+  rotate_when_changed = {
+    rotation = time_rotating.example.id
+  }
+  start_date = time_rotating.example.rfc3339          # Use the base timestamp as the start date
+  end_date   = time_rotating.example.rotation_rfc3339 # Use the rotation timestamp as the end date
+}
+
+resource "azurerm_key_vault_secret" "sp_password_secret" {
+  name         = "slackbot-acr-pull-pwd"
+  value        = azuread_service_principal_password.sp_password.value
+  key_vault_id = azurerm_key_vault.example.id
+}
 resource "azurerm_role_assignment" "resource_group_contributor" {
   principal_id         = data.azuread_service_principal.sp.object_id
   role_definition_name = "Owner"
