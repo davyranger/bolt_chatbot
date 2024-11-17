@@ -49,23 +49,30 @@ resource "azurerm_role_assignment" "resource_group_contributor" {
   role_definition_name = "Owner"
   scope                = data.azurerm_resource_group.example.id
 }
+
+resource "random_password" "password" {
+  length           = 16
+  special          = true
+  override_special = "_%@#"
+}
 resource "time_rotating" "example" {
   rotation_days = 7
 }
 resource "azuread_service_principal_password" "sp_password" {
   service_principal_id = data.azuread_service_principal.sp.id
+  value                = random_password.password.result
   rotate_when_changed = {
     rotation = time_rotating.example.id
   }
-  start_date = time_rotating.example.rfc3339  # Use the base timestamp as the start date
-  end_date   = time_rotating.example.rotation_rfc3339  # Use the rotation timestamp as the end date
+  start_date = time_rotating.example.rfc3339          # Use the base timestamp as the start date
+  end_date   = time_rotating.example.rotation_rfc3339 # Use the rotation timestamp as the end date
 }
 
 # Role Assignment for ACR Pull Permission
 resource "azurerm_role_assignment" "acr_pull" {
-  principal_id = data.azuread_service_principal.sp.object_id
+  principal_id         = data.azuread_service_principal.sp.object_id
   role_definition_name = "AcrPull"
-  scope        = data.azurerm_container_registry.example.id
+  scope                = data.azurerm_container_registry.example.id
 }
 
 # Store Service Principal Password in Key Vault
