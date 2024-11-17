@@ -49,13 +49,6 @@ resource "azurerm_role_assignment" "resource_group_contributor" {
   role_definition_name = "Owner"
   scope                = data.azurerm_resource_group.example.id
 }
-
-# Generate password for Service Principal
-resource "random_password" "sp_password" {
-  length  = 16
-  special = true
-}
-
 resource "time_rotating" "example" {
   rotation_days = 7
 }
