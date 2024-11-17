@@ -153,6 +153,9 @@ jobs:
 
       - name: Terraform Apply
         if: env.result == 'true'
+        env:
+          ACR_USERNAME: ${{ secrets.ACR_USERNAME }}
+          ACR_PASSWORD: ${{ secrets.ACR_PASSWORD }}
         run: |
           terraform apply \
             -auto-approve "tfplan"
