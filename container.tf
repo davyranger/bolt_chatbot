@@ -138,8 +138,8 @@ resource "azurerm_container_group" "example" {
   }
 
   image_registry_credential {
-    username = data.azuread_service_principal.sp.id
-    password = azuread_service_principal_password.sp_password.value
+    username = "boltslackbotcontainerregistry"
+    password = "3Kwfge/ny9yNlx4AKh80svuZW1rAN16d9pvo/6hyOf+ACRAhAM1k"
     server   = data.azurerm_container_registry.example.login_server
   }
 }
