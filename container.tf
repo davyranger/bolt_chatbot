@@ -84,15 +84,6 @@ resource "azurerm_role_assignment" "acr_pull" {
 #   tenant_id           = data.azurerm_client_config.current.tenant_id
 # }
 
-import {
-  to = azurerm_key_vault_access_policy.sp_access_policy
-  id = "/subscriptions/6dff3615-67d2-4569-888e-fd5c5a829acb/resourceGroups/slack-bot-rg/providers/Microsoft.KeyVault/vaults/davysslackbotkeyvault/objectId/71fdc874-cc03-4e4f-b597-2de49c07589f"
-}
-
-import {
-  to = azurerm_key_vault_secret.sp_id_secret 
-  id = "/subscriptions/6dff3615-67d2-4569-888e-fd5c5a829acb/resourceGroups/slack-bot-rg/providers/Microsoft.KeyVault/vaults/davysslackbotkeyvault/secrets/slackbot-acr-pull-usr"
-}
 
 # Store Service Principal ID in Key Vault
 # resource "azurerm_key_vault_secret" "sp_id_secret" {
