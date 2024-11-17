@@ -42,9 +42,9 @@ data "azurerm_container_registry" "example" {
 data "azurerm_client_config" "current" {}
 
 # Reference existing Azure AD Application
-data "azuread_application" "existing_app" {
-  display_name = "github-actions-terraform-authenticate" # Replace with your existing app registration ID
-}
+# data "azuread_application" "existing_app" {
+#   display_name = "github-actions-terraform-authenticate" # Replace with your existing app registration ID
+# }
 
 import {
   to = azuread_service_principal.sp
@@ -52,7 +52,7 @@ import {
 }
 
 resource "azuread_service_principal" "sp" {
-  client_id = data.azuread_application.existing_app.client_id
+  client_id = ""
 }
 resource "azurerm_role_assignment" "resource_group_contributor" {
   principal_id         = azuread_service_principal.sp.id
@@ -100,7 +100,7 @@ resource "azurerm_key_vault_secret" "sp_password_secret" {
 # Store Service Principal ID in Key Vault
 resource "azurerm_key_vault_secret" "sp_id_secret" {
   name         = "slackbot-acr-pull-usr"
-  value        = data.azuread_application.existing_app.client_id
+  value        = azuread_service_principal.sp.id
   key_vault_id = azurerm_key_vault.example.id
 }
 
