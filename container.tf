@@ -45,6 +45,10 @@ data "azurerm_client_config" "current" {}
 data "azuread_application" "existing_app" {
   display_name = "github-actions-terraform-authenticate" # Replace with your existing app registration ID
 }
+
+resource "azuread_service_principal" "sp" {
+  client_id = data.azuread_application.existing_app.client_id
+}
 resource "azurerm_role_assignment" "resource_group_contributor" {
   principal_id         = data.azuread_application.existing_app.client_id
   role_definition_name = "Contributor"
