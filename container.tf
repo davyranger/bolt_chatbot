@@ -138,8 +138,8 @@ resource "azurerm_container_group" "example" {
   }
 
   image_registry_credential {
-    username = data.azuread_service_principal.sp.id
-    password = azuread_service_principal_password.sp_password.value
+    username = var.acr_username
+    password = var.acr_password
     server   = data.azurerm_container_registry.example.login_server
   }
 }
