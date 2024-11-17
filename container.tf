@@ -98,7 +98,7 @@ resource "azurerm_key_vault_secret" "sp_id_secret" {
 resource "azurerm_key_vault_access_policy" "sp_access_policy" {
   key_vault_id = azurerm_key_vault.example.id
   tenant_id    = data.azurerm_client_config.current.tenant_id
-  object_id    = data.azuread_service_principal.sp.id
+  object_id    = data.azuread_service_principal.sp.object_id
 
   secret_permissions = [
     "Get",
