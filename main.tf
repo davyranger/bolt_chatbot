@@ -21,7 +21,7 @@ provider "azurerm" {
   use_oidc = true # OIDC authentication with Azure (useful for GitHub Actions)
 }
 
-# Define an Azure Resource Group for organizing resources
+## Define an Azure Resource Group for organizing resources
 resource "azurerm_resource_group" "rg" {
   name     = "slack-bot-rg"     # Name of the resource group
   location = "australiacentral" # Azure region where the resource group is located
