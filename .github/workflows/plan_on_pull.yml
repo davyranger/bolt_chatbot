@@ -6,6 +6,7 @@ on:
     branches:
       - main
 
+      
     paths:
       # the workflow will only run if the below are changed
       - 'container.tf'
