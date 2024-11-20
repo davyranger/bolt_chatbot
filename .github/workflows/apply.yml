@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - main
+    branches-ignore:
+      - 'feature/CLOUD-**'      
 
 permissions:
   id-token: write
@@ -86,18 +88,18 @@ jobs:
   
       - name: Log in to ACR
         run: |
-          az acr login --name boltslackbotcontainerregistry
+          az acr login --name boltslackbotacr
   
       - name: Build Docker image
         run: |
           docker build \
             --build-arg SLACK_BOT_TOKEN=${{ secrets.SLACK_BOT_TOKEN }} \
             --build-arg SLACK_APP_TOKEN=${{ secrets.SLACK_APP_TOKEN }} \
-            -t boltslackbotcontainerregistry.azurecr.io/slack-bot:latest .
+            -t boltslackbotacr.azurecr.io/slack-bot:latest .
   
       - name: Push Docker image to ACR
         run: |
-          docker push boltslackbotcontainerregistry.azurecr.io/slack-bot:latest 
+          docker push boltslackbotacr.azurecr.io/slack-bot:latest 
 
   terraform-apply-container:
     runs-on: ubuntu-latest

@@ -4,6 +4,12 @@ on:
   pull_request:
     branches: 
       - main
+    branches-ignore:
+      - 'feature/CLOUD-**'
+
+    paths:
+      - 'bolt_chatbot\container.tf'
+      - 'bolt_chatbot\main.tf'
 
 permissions:
   id-token: write
