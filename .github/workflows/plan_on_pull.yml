@@ -2,12 +2,12 @@ name: Azure Plan Workflow
 
 on:
   pull_request:
-    branches: 
-      - main
+    # will target all branches except the below
     branches-ignore:
       - 'feature/CLOUD-**'
 
     paths:
+      # the workflow will only run if the below are changed
       - 'bolt_chatbot\container.tf'
       - 'bolt_chatbot\main.tf'
 
