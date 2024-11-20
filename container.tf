@@ -12,7 +12,7 @@ terraform {
 
   backend "azurerm" {
     resource_group_name  = "rg-terraform-github-actions-state"
-    storage_account_name = "tfgithubactions453335"
+    storage_account_name = "davyterraform"
     container_name       = "boltslackbotcontainer"
     key                  = "terraform.tfstate"
     use_oidc             = true
