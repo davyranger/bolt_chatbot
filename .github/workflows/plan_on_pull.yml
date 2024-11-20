@@ -5,8 +5,7 @@ on:
     # will target all branches except the below (only use branches or branches-ignore)
     branches:
       - main
-
-      
+     
     paths:
       # the workflow will only run if the below are changed
       - 'container.tf'
