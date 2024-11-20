@@ -6,6 +6,11 @@ on:
     branches:
       - main
 
+    paths:
+      # the workflow will only run if the below are changed
+      - 'container.tf'
+      - 'main.tf'
+
 permissions:
   id-token: write
   contents: read

@@ -27,6 +27,7 @@ resource "azurerm_resource_group" "rg" {
   location = "australiacentral" # Azure region where the resource group is located
 }
 
+
 resource "azurerm_container_registry" "example" {
   name                = "boltslackbotacr"
   resource_group_name = azurerm_resource_group.rg.name
