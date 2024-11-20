@@ -33,7 +33,6 @@ data "azurerm_resource_group" "example" {
   name = "slack-bot-rg"
 }
 
-
 # Container Registry Data Source
 data "azurerm_container_registry" "example" {
   name                = "boltslackbotacr"
