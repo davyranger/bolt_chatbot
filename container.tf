@@ -11,7 +11,7 @@ terraform {
   }
 
   backend "azurerm" {
-    resource_group_name  = "rg-terraform-github-actions-state"
+    resource_group_name  = "platform-terraform-state"
     storage_account_name = "davyterraform"
     container_name       = "boltslackbotcontainer"
     key                  = "terraform.tfstate"
@@ -42,7 +42,7 @@ data "azurerm_container_registry" "example" {
 data "azurerm_client_config" "current" {}
 
 data "azuread_service_principal" "sp" {
-  object_id = "71fdc874-cc03-4e4f-b597-2de49c07589f"
+  object_id = "a6b61242-8c4f-49a5-82b7-0ccc1484369e"
 }
 
 resource "time_rotating" "example" {
