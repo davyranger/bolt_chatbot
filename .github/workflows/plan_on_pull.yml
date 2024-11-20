@@ -6,11 +6,6 @@ on:
     branches:
       - main
 
-    paths:
-      # the workflow will only run if the below are changed
-      - 'bolt_chatbot/container.tf'
-      - 'bolt_chatbot/main.tf'
-
 permissions:
   id-token: write
   contents: read
