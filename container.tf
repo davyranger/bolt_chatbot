@@ -40,9 +40,10 @@ data "azurerm_container_registry" "example" {
 }
 
 data "azurerm_client_config" "current" {}
+data "azurerm_subscription" "primary" {}
 
 data "azuread_service_principal" "sp" {
-  object_id = "a6b61242-8c4f-49a5-82b7-0ccc1484369e"
+  display_name = "GiHub Actions"
 }
 
 # resource "time_rotating" "example" {
