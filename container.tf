@@ -39,7 +39,7 @@ data "azurerm_container_registry" "example" {
 }
 
 data "azuread_service_principal" "sp" {
-  client_id = "1c4e9ab5-2428-421b-8d0b-7651095d00a8"
+  object_id = "fddda90e-aa3d-414c-97a3-b30a56ecbbf3"
 }
 
 # Managed Identity
@@ -94,6 +94,6 @@ resource "azurerm_container_group" "example" {
     user_assigned_identity_id = azurerm_user_assigned_identity.managed_identity.id
     # username                  = var.acr_username
     # password                  = var.acr_password
-    server                    = data.azurerm_container_registry.example.login_server
+    server = data.azurerm_container_registry.example.login_server
   }
 }
