@@ -21,10 +21,20 @@ provider "azurerm" {
   use_oidc = true # OIDC authentication with Azure (useful for GitHub Actions)
 }
 
+data "azuread_service_principal" "sp" {
+  object_id = "fddda90e-aa3d-414c-97a3-b30a56ecbbf3"
+}
+
 # Define an Azure Resource Group for organizing resources
 resource "azurerm_resource_group" "rg" {
   name     = "slack-bot-rg"     # Name of the resource group
   location = "australiacentral" # Azure region where the resource group is located
+}
+
+resource "azurerm_role_assignment" "resource_group_contributor" {
+  principal_id         = data.azuread_service_principal.sp.object_id
+  role_definition_name = "Owner"
+  scope                = data.azurerm_resource_group.example.id
 }
 
 
