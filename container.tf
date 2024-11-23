@@ -140,9 +140,10 @@ resource "azurerm_container_group" "example" {
   }
   # az acr credential show --name boltslackbotcontainerregistry
   image_registry_credential {
+    user_assigned_identity_id = azurerm_user_assigned_identity.managed_identity.id
     # username = var.acr_username
     # password = var.acr_password
-    server   = data.azurerm_container_registry.example.login_server
+    server = data.azurerm_container_registry.example.login_server
   }
 }
 
