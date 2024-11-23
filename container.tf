@@ -39,7 +39,7 @@ data "azurerm_container_registry" "example" {
 }
 
 data "azuread_service_principal" "sp" {
-  display_name = "GitHub Actions"
+  client_id = "1c4e9ab5-2428-421b-8d0b-7651095d00a8"
 }
 
 # Managed Identity
