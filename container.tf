@@ -28,87 +28,38 @@ provider "azurerm" {
   use_oidc = true
 }
 
-## Resource Group Data Source
+# Data Sources
 data "azurerm_resource_group" "example" {
   name = "slack-bot-rg"
 }
 
-# Container Registry Data Source
 data "azurerm_container_registry" "example" {
   name                = "boltslackbotacr"
   resource_group_name = data.azurerm_resource_group.example.name
 }
 
-data "azurerm_client_config" "current" {}
-data "azurerm_subscription" "primary" {}
-
 data "azuread_service_principal" "sp" {
-  display_name = "GiHub Actions"
+  display_name = "GitHub Actions"
 }
-
-# resource "time_rotating" "example" {
-#   rotation_days = 7
-# }
-# resource "azuread_service_principal_password" "sp_password" {
-#   service_principal_id = data.azuread_service_principal.sp.id
-#   rotate_when_changed = {
-#     rotation = time_rotating.example.id
-#   }
-#   start_date = time_rotating.example.rfc3339          # Use the base timestamp as the start date
-#   end_date   = time_rotating.example.rotation_rfc3339 # Use the rotation timestamp as the end date
-# }
-
-# resource "azurerm_key_vault_secret" "sp_password_secret" {
-#   name         = "slackbot-acr-pull-pwd"
-#   value        = azuread_service_principal_password.sp_password.value
-#   key_vault_id = azurerm_key_vault.example.id
-# }
-resource "azurerm_role_assignment" "resource_group_contributor" {
-  principal_id         = data.azuread_service_principal.sp.object_id
-  role_definition_name = "Owner"
-  scope                = data.azurerm_resource_group.example.id
-}
-
-# Role Assignment for ACR Pull Permission
-resource "azurerm_role_assignment" "acr_pull" {
-  principal_id         = data.azuread_service_principal.sp.object_id
-  role_definition_name = "AcrPull"
-  scope                = data.azurerm_container_registry.example.id
-}
-
-# Store Service Principal Password in Key Vault
-# resource "azurerm_key_vault" "example" {
-#   name                = "davysslackbotkeyvault"
-#   location            = data.azurerm_resource_group.example.location
-#   resource_group_name = data.azurerm_resource_group.example.name
-#   sku_name            = "standard"
-#   tenant_id           = data.azurerm_client_config.current.tenant_id
-# }
-
-
-# Store Service Principal ID in Key Vault
-# resource "azurerm_key_vault_secret" "sp_id_secret" {
-#   name         = "slackbot-acr-pull-usr"
-#   value        = data.azuread_service_principal.sp.id
-#   key_vault_id = azurerm_key_vault.example.id
-# }
-# resource "azurerm_key_vault_access_policy" "sp_access_policy" {
-#   key_vault_id = azurerm_key_vault.example.id
-#   tenant_id    = data.azurerm_client_config.current.tenant_id
-#   object_id    = data.azuread_service_principal.sp.object_id
-
-#   secret_permissions = [
-#     "Get",
-#     "List",
-#     "Set"
-#   ]
-# }
 
 # Managed Identity
 resource "azurerm_user_assigned_identity" "managed_identity" {
   name                = "slackbot-identity"
   location            = data.azurerm_resource_group.example.location
   resource_group_name = data.azurerm_resource_group.example.name
+}
+
+# Role Assignments
+resource "azurerm_role_assignment" "resource_group_contributor" {
+  principal_id         = data.azuread_service_principal.sp.object_id
+  role_definition_name = "Owner"
+  scope                = data.azurerm_resource_group.example.id
+}
+
+resource "azurerm_role_assignment" "acr_pull" {
+  principal_id         = data.azuread_service_principal.sp.object_id
+  role_definition_name = "AcrPull"
+  scope                = data.azurerm_container_registry.example.id
 }
 
 # Container Group
@@ -138,30 +89,11 @@ resource "azurerm_container_group" "example" {
       SLACK_APP_TOKEN = var.slack_app_token
     }
   }
-  # az acr credential show --name boltslackbotacr
+
   image_registry_credential {
-    # user_assigned_identity_id = azurerm_user_assigned_identity.managed_identity.id
-    username = var.acr_username
-    password = var.acr_password
-    server = data.azurerm_container_registry.example.login_server
+    user_assigned_identity_id = azurerm_user_assigned_identity.managed_identity.id
+    # username                  = var.acr_username
+    # password                  = var.acr_password
+    server                    = data.azurerm_container_registry.example.login_server
   }
-}
-
-# Custom Role Definition (If Required)
-resource "azurerm_role_definition" "custom_role_definition" {
-  name        = "RoleAssignmentContributor"
-  scope       = data.azurerm_resource_group.example.id
-  description = "Custom role with permissions to manage role assignments"
-  permissions {
-    actions = [
-      "Microsoft.Authorization/roleAssignments/write",
-      "Microsoft.Authorization/roleAssignments/delete",
-    ]
-    not_actions = []
-  }
-
-  assignable_scopes = [
-    data.azurerm_resource_group.example.id,
-    data.azurerm_container_registry.example.id
-  ]
 }
