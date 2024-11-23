@@ -34,7 +34,7 @@ resource "azurerm_resource_group" "rg" {
 resource "azurerm_role_assignment" "resource_group_contributor" {
   principal_id         = data.azuread_service_principal.sp.object_id
   role_definition_name = "Owner"
-  scope                = data.azurerm_resource_group.example.id
+  scope                = azurerm_resource_group.rg.id
 }
 
 
