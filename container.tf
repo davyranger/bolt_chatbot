@@ -45,17 +45,17 @@ data "azuread_service_principal" "sp" {
   object_id = "a6b61242-8c4f-49a5-82b7-0ccc1484369e"
 }
 
-resource "time_rotating" "example" {
-  rotation_days = 7
-}
-resource "azuread_service_principal_password" "sp_password" {
-  service_principal_id = data.azuread_service_principal.sp.id
-  rotate_when_changed = {
-    rotation = time_rotating.example.id
-  }
-  start_date = time_rotating.example.rfc3339          # Use the base timestamp as the start date
-  end_date   = time_rotating.example.rotation_rfc3339 # Use the rotation timestamp as the end date
-}
+# resource "time_rotating" "example" {
+#   rotation_days = 7
+# }
+# resource "azuread_service_principal_password" "sp_password" {
+#   service_principal_id = data.azuread_service_principal.sp.id
+#   rotate_when_changed = {
+#     rotation = time_rotating.example.id
+#   }
+#   start_date = time_rotating.example.rfc3339          # Use the base timestamp as the start date
+#   end_date   = time_rotating.example.rotation_rfc3339 # Use the rotation timestamp as the end date
+# }
 
 # resource "azurerm_key_vault_secret" "sp_password_secret" {
 #   name         = "slackbot-acr-pull-pwd"
