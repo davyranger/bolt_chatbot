@@ -138,11 +138,11 @@ resource "azurerm_container_group" "example" {
       SLACK_APP_TOKEN = var.slack_app_token
     }
   }
-  # az acr credential show --name boltslackbotcontainerregistry
+  # az acr credential show --name boltslackbotacr
   image_registry_credential {
-    user_assigned_identity_id = azurerm_user_assigned_identity.managed_identity.id
-    # username = var.acr_username
-    # password = var.acr_password
+    # user_assigned_identity_id = azurerm_user_assigned_identity.managed_identity.id
+    username = var.acr_username
+    password = var.acr_password
     server = data.azurerm_container_registry.example.login_server
   }
 }
