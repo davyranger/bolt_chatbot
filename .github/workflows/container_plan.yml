@@ -3,7 +3,7 @@ name: Container Plan Workflow
 on:
   workflow_run:
     workflows: [Main Plan Workflow]
-    types: [completed]
+    types: [requested]
     branches:
       - '!main'
 
