@@ -51,7 +51,7 @@ resource "azurerm_user_assigned_identity" "managed_identity" {
 
 # Role Assignments
 resource "azurerm_role_assignment" "acr_pull" {
-  principal_id         = data.azuread_service_principal.sp.object_id
+  principal_id         = azurerm_user_assigned_identity.managed_identity.principal_id
   role_definition_name = "AcrPull"
   scope                = data.azurerm_container_registry.example.id
 }
