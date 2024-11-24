@@ -2,12 +2,12 @@ name: Container Plan Workflow
 
 on:
   workflow_run:
-    workflows: ["Main Plan Workflow"]
+    workflows: ["Main-Plan-Workflow"]
     types: [completed]
 
 permissions:
   id-token: write
-  contents: write
+  contents: read
 
 env:
   ARM_CLIENT_ID: "${{ secrets.AZURE_CLIENT_ID }}"
