@@ -59,7 +59,7 @@ resource "azurerm_role_assignment" "acr_pull" {
   scope                = data.azurerm_container_registry.example.id
 }
 
-## Container Group
+# Container Group
 resource "azurerm_container_group" "example" {
   name                = "boltslackbotgroup"
   location            = data.azurerm_resource_group.example.location
