@@ -1,8 +1,12 @@
 terraform {
   required_providers {
     azurerm = {
-      source  = "hashicorp/azurerm" # Specify the Azure provider source and version
-      version = ">= 3.7.0"          # Minimum required version of AzureRM provider
+      source  = "hashicorp/azurerm"
+      version = ">= 3.7.0"
+    }
+    azuread = {
+      source  = "hashicorp/azuread"
+      version = ">= 2.0"
     }
   }
 
@@ -16,15 +20,29 @@ terraform {
   }
 }
 
+provider "azuread" {
+  use_oidc = true
+}
+
 provider "azurerm" {
   features {}     # Enables the use of the AzureRM provider without additional config
   use_oidc = true # OIDC authentication with Azure (useful for GitHub Actions)
+}
+
+data "azuread_service_principal" "sp" {
+  object_id = "fddda90e-aa3d-414c-97a3-b30a56ecbbf3"
 }
 
 # Define an Azure Resource Group for organizing resources
 resource "azurerm_resource_group" "rg" {
   name     = "slack-bot-rg"     # Name of the resource group
   location = "australiacentral" # Azure region where the resource group is located
+}
+
+resource "azurerm_role_assignment" "resource_group_contributor" {
+  principal_id         = data.azuread_service_principal.sp.object_id
+  role_definition_name = "Owner"
+  scope                = azurerm_resource_group.rg.id
 }
 
 

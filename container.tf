@@ -50,12 +50,6 @@ resource "azurerm_user_assigned_identity" "managed_identity" {
 }
 
 # Role Assignments
-resource "azurerm_role_assignment" "resource_group_contributor" {
-  principal_id         = data.azuread_service_principal.sp.object_id
-  role_definition_name = "Owner"
-  scope                = data.azurerm_resource_group.example.id
-}
-
 resource "azurerm_role_assignment" "acr_pull" {
   principal_id         = data.azuread_service_principal.sp.object_id
   role_definition_name = "AcrPull"
