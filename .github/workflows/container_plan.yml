@@ -1,14 +1,11 @@
 name: Container Plan Workflow
 
 on:
-  pull_request:
-    # will target all branches except the below (only use branches or branches-ignore)
+  workflow_run:
+    workflows: [Main Plan Workflow]
+    types: [completed]
     branches:
-      - main
-
-    paths:
-      # the workflow will only run if the below are changed
-      - 'container.tf'
+      - '!main'
 
 permissions:
   id-token: write
