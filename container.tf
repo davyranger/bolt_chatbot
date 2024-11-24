@@ -31,7 +31,7 @@ provider "azurerm" {
   resource_provider_registrations = "none" # Disable automatic resource provider registrations
 }
 
-### Data Sources
+# Data Sources
 data "azurerm_resource_group" "example" {
   name = "slack-bot-rg"
 }

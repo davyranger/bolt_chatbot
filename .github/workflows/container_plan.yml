@@ -1,7 +1,6 @@
 name: Container Plan Workflow
 
 on:
-  workflow_dispatch:
   workflow_run:
     workflows: ["Main Plan Workflow"]
     types: [completed]
