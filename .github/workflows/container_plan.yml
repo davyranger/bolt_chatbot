@@ -1,15 +1,11 @@
-name: Azure Plan Workflow
+name: Container Plan Workflow
 
 on:
-  pull_request:
-    # will target all branches except the below (only use branches or branches-ignore)
+  workflow_run:
+    workflows: ["Main Plan Workflow"]
     branches:
       - main
-     
-    paths:
-      # the workflow will only run if the below are changed
-      - 'container.tf'
-      - 'main.tf'
+    types: [completed]
 
 permissions:
   id-token: write
@@ -23,17 +19,11 @@ env:
 jobs:
   terraform-plan-policy-check:
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
-      with:
-        sparse-checkout: |
-          /*
-          !/container.tf
-          !/variables.tf
-        sparse-checkout-cone-mode: false
 
     - name: Terraform install
       uses: hashicorp/setup-terraform@v3

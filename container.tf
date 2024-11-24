@@ -26,8 +26,8 @@ provider "azuread" {
 }
 
 provider "azurerm" {
-  features {}     # Enables the use of the AzureRM provider without additional config
-  use_oidc = true # OIDC authentication with Azure (useful for GitHub Actions)
+  features {}                              # Enables the use of the AzureRM provider without additional config
+  use_oidc                        = true   # OIDC authentication with Azure (useful for GitHub Actions)
   resource_provider_registrations = "none" # Disable automatic resource provider registrations
 }
 
@@ -89,8 +89,6 @@ resource "azurerm_container_group" "example" {
 
   image_registry_credential {
     user_assigned_identity_id = azurerm_user_assigned_identity.managed_identity.id
-    # username                  = var.acr_username
-    # password                  = var.acr_password
-    server = data.azurerm_container_registry.example.login_server
+    server                    = data.azurerm_container_registry.example.login_server
   }
 }
