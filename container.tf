@@ -32,7 +32,6 @@ provider "azurerm" {
 }
 
 # Data Sources
-
 data "azurerm_resource_group" "example" {
   name = "slack-bot-rg"
 }
@@ -47,6 +46,7 @@ data "azuread_service_principal" "sp" {
 }
 
 # Managed Identity
+
 resource "azurerm_user_assigned_identity" "managed_identity" {
   name                = "slackbot-identity"
   location            = data.azurerm_resource_group.example.location

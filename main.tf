@@ -13,7 +13,6 @@ terraform {
   required_version = "~> 1.9.0"
 
   # Configuration for storing Terraform state remotely in an Azure storage account
-  
   backend "azurerm" {
     resource_group_name  = "platform-terraform-state" # Resource group where the storage account is located
     storage_account_name = "davyterraform"            # Azure Storage account for storing the state file
@@ -34,6 +33,7 @@ provider "azurerm" {
 }
 
 # Define an Azure Resource Group for organizing resources
+
 resource "azurerm_resource_group" "rg" {
   name     = "slack-bot-rg"     # Name of the resource group
   location = "australiacentral" # Azure region where the resource group is located
