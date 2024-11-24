@@ -1,8 +1,12 @@
 terraform {
   required_providers {
     azurerm = {
-      source  = "hashicorp/azurerm" # Specify the Azure provider source and version
-      version = ">= 3.7.0"          # Minimum required version of AzureRM provider
+      source  = "hashicorp/azurerm"
+      version = ">= 3.7.0"
+    }
+    azuread = {
+      source  = "hashicorp/azuread"
+      version = ">= 2.0"
     }
   }
 
@@ -14,6 +18,10 @@ terraform {
     key                  = "terraform.tfstate"        # Name of the Terraform state file
     use_oidc             = true                       # Enable OIDC for authentication with Azure
   }
+}
+
+provider "azuread" {
+  use_oidc = true
 }
 
 provider "azurerm" {
