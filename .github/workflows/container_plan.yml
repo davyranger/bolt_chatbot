@@ -3,8 +3,6 @@ name: Container Plan Workflow
 on:
   workflow_run:
     workflows: ["Main Plan Workflow"]
-    branches:
-      - main
     types: [completed]
 
 permissions:
