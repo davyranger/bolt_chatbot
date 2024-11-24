@@ -1,11 +1,9 @@
 name: Azure Apply Workflow
 
 on:
-  workflow_run:
-    workflows: ["Main Apply Workflow"]
+  push:
     branches:
-      - main   
-    types: [completed]
+      - main
 
 permissions:
   id-token: write
