@@ -5,6 +5,8 @@ on:
     workflows: [ Main-Plan-Workflow ]
     types:
       - completed
+    branches:
+      - '!main'
 
 permissions:
   id-token: write
