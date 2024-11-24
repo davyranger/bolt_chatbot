@@ -2,13 +2,15 @@ terraform {
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = ">= 3.7.0"
+      version = "= 4.11.0"
     }
     azuread = {
       source  = "hashicorp/azuread"
-      version = ">= 2.0"
+      version = "= 3.0.2"
     }
   }
+
+  required_version = "~> 1.9.0"
 
   # Configuration for storing Terraform state remotely in an Azure storage account
   backend "azurerm" {
