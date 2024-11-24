@@ -26,8 +26,9 @@ provider "azuread" {
 }
 
 provider "azurerm" {
-  features {}
-  use_oidc = true
+  features {}     # Enables the use of the AzureRM provider without additional config
+  use_oidc = true # OIDC authentication with Azure (useful for GitHub Actions)
+  resource_provider_registrations = "none" # Disable automatic resource provider registrations
 }
 
 # Data Sources
