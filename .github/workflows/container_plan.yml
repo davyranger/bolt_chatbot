@@ -4,8 +4,6 @@ on:
   workflow_run:
     workflows: ["Main Plan Workflow"]
     types: [requested]
-    branches:
-      - 'multiple_workflows'
 
 permissions:
   id-token: write
