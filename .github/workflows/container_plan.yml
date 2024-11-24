@@ -2,7 +2,7 @@ name: Container-Plan-Workflow
 
 on:
   workflow_run:
-    workflows: ["Main-Plan-Workflow"]
+    workflows: [ Main-Plan-Workflow ]
     types: [completed]
 
 permissions:
