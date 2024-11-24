@@ -1,12 +1,11 @@
 name: Container-Plan-Workflow
 
 on:
+  pull_request:
   workflow_run:
     workflows: [ Main-Plan-Workflow ]
     types:
       - completed
-    branches:
-      - '!main'
 
 permissions:
   id-token: write
