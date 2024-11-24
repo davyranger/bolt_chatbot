@@ -5,7 +5,7 @@ on:
     workflows: [Main Plan Workflow]
     types: [requested]
     branches:
-      - '!main'
+      - 'multiple_workflows'
 
 permissions:
   id-token: write
