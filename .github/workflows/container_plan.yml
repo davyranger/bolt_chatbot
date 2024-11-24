@@ -1,4 +1,4 @@
-name: Container Plan Workflow
+name: Container-Plan-Workflow
 
 on:
   workflow_run:
