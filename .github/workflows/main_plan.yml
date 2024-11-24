@@ -1,4 +1,4 @@
-name: Azure Plan Workflow
+name: Main Plan Workflow
 
 on:
   pull_request:
@@ -8,7 +8,6 @@ on:
      
     paths:
       # the workflow will only run if the below are changed
-      - 'container.tf'
       - 'main.tf'
 
 permissions:
@@ -21,7 +20,7 @@ env:
   ARM_TENANT_ID: "${{ secrets.AZURE_TENANT_ID }}"
 
 jobs:
-  terraform-plan-policy-check:
+  terraform-main-plan-check:
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
 
