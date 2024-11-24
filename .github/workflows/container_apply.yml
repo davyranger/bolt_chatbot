@@ -1,4 +1,4 @@
-name: Azure Apply Workflow
+name: Container Apply Workflow
 
 on:
   push:
