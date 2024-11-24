@@ -20,7 +20,7 @@ env:
   ARM_TENANT_ID: "${{ secrets.AZURE_TENANT_ID }}"
 
 jobs:
-  terraform-plan-policy-check:
+  terraform-main-plan-check:
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
 
