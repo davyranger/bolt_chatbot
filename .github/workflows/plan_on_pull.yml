@@ -35,7 +35,7 @@ jobs:
       run: terraform init -reconfigure
 
     - name: Terraform Force Unlock
-      run: terraform force-unlock -force eyJJRCI6ImZjNzczMzUxLTUxZTYtY2E2Zi01MmZkLTk0MDcwODA4MjJiMCIsIk9wZXJhdGlvbiI6Ik9wZXJhdGlvblR5cGVQbGFuIiwiSW5mbyI6IiIsIldobyI6InJ1bm5lckBmdi1hejE0MDUtNzc2IiwiVmVyc2lvbiI6IjEuOS44IiwiQ3JlYXRlZCI6IjIwMjQtMTEtMjVUMTI6NTk6MDguODIwMTM3NjU0WiIsIlBhdGgiOiJib2x0c2xhY2tib3QvdGVycmFmb3JtLnRmc3RhdGUifQ==
+      run: terraform force-unlock -force fc773351-51e6-ca6f-52fd-9407080822b0
 
     - name: Terraform Plan
       run: terraform plan -out "tfplan"
