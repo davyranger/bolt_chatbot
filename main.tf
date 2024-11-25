@@ -13,6 +13,7 @@ terraform {
   required_version = "~> 1.9.0"
 
   # Configuration for storing Terraform state remotely in an Azure storage account
+  
   backend "azurerm" {
     resource_group_name  = "platform-terraform-state" # Resource group where the storage account is located
     storage_account_name = "davyterraform"            # Azure Storage account for storing the state file
@@ -27,8 +28,8 @@ provider "azuread" {
 }
 
 provider "azurerm" {
-  features {}     # Enables the use of the AzureRM provider without additional config
-  use_oidc = true # OIDC authentication with Azure (useful for GitHub Actions)
+  features {}                              # Enables the use of the AzureRM provider without additional config
+  use_oidc                        = true   # OIDC authentication with Azure (useful for GitHub Actions)
   resource_provider_registrations = "none" # Disable automatic resource provider registrations
 }
 

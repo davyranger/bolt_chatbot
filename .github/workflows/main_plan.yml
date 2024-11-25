@@ -1,4 +1,4 @@
-name: Azure Plan Workflow
+name: Main-Plan-Workflow
 
 on:
   pull_request:
@@ -12,7 +12,9 @@ on:
 
 permissions:
   id-token: write
-  contents: read
+  contents: write
+  actions: write
+  deployments: write
 
 env:
   ARM_CLIENT_ID: "${{ secrets.AZURE_CLIENT_ID }}"
@@ -20,7 +22,7 @@ env:
   ARM_TENANT_ID: "${{ secrets.AZURE_TENANT_ID }}"
 
 jobs:
-  terraform-plan-policy-check:
+  terraform-main-plan-check:
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
 
