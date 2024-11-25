@@ -16,8 +16,6 @@ env:
   ARM_TENANT_ID: "${{ secrets.AZURE_TENANT_ID }}"
   SLACK_BOT_TOKEN: "${{ secrets.SLACK_BOT_TOKEN }}"
   SLACK_APP_TOKEN: "${{ secrets.SLACK_APP_TOKEN }}"
-  ACR_USERNAME: "${{ secrets.ACR_USERNAME }}"
-  ACR_PASSWORD: "${{ secrets.ACR_PASSWORD }}"
 
 jobs:
   terraform:
@@ -30,11 +28,6 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
-      with:
-        sparse-checkout: |
-          /*
-          !/main.tf
-        sparse-checkout-cone-mode: false
 
     - name: Terraform install
       uses: hashicorp/setup-terraform@v3
@@ -47,8 +40,6 @@ jobs:
         terraform plan \
           -var="slack_bot_token=${{ secrets.SLACK_BOT_TOKEN }}" \
           -var="slack_app_token=${{ secrets.SLACK_APP_TOKEN }}" \
-          -var="acr_username=${{ secrets.ACR_USERNAME }}" \
-          -var="acr_password=${{ secrets.ACR_PASSWORD }}" \
           -out "tfplan"
       timeout-minutes: 5
 
