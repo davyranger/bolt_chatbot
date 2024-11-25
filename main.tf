@@ -17,7 +17,7 @@ terraform {
   backend "azurerm" {
     resource_group_name  = "platform-terraform-state" # Resource group where the storage account is located
     storage_account_name = "davyterraform"            # Azure Storage account for storing the state file
-    container_name       = "boltslackbot"             # Blob container where the state file will be stored
+    container_name       = "slackbot"             # Blob container where the state file will be stored
     key                  = "terraform.tfstate"        # Name of the Terraform state file
     use_oidc             = true                       # Enable OIDC for authentication with Azure
   }
