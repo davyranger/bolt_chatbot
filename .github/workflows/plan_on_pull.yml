@@ -34,9 +34,6 @@ jobs:
     - name: Terraform Init
       run: terraform init -reconfigure
 
-    - name: Terraform Force Unlock
-      run: terraform force-unlock -force fc773351-51e6-ca6f-52fd-9407080822b0
-
     - name: Terraform Plan
       run: terraform plan -out "tfplan"
 
