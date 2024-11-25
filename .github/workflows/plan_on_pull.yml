@@ -36,7 +36,6 @@ jobs:
 
     - name: Terraform Plan
       run: terraform plan -out "tfplan"
-      timeout-minutes: 2
 
     - name: Convert Terraform Plan to JSON
       run: terraform show -json tfplan | grep '^{.*}$' > tfplan.json
