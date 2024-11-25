@@ -35,7 +35,7 @@ jobs:
       run: terraform init -reconfigure
 
     - name: Terraform Plan
-      run: terraform plan -out "tfplan"
+      run: terraform plan -out "tfplan" -lock-timeout=30s
 
     - name: Convert Terraform Plan to JSON
       run: terraform show -json tfplan | grep '^{.*}$' > tfplan.json
