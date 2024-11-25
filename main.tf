@@ -13,7 +13,7 @@ terraform {
   required_version = "~> 1.9.0"
 
   # Configuration for storing Terraform state remotely in an Azure storage account
-  
+
   backend "azurerm" {
     resource_group_name  = "platform-terraform-state" # Resource group where the storage account is located
     storage_account_name = "davyterraform"            # Azure Storage account for storing the state file
@@ -54,7 +54,7 @@ resource "azurerm_user_assigned_identity" "managed_identity" {
 resource "azurerm_role_assignment" "acr_pull" {
   principal_id         = azurerm_user_assigned_identity.managed_identity.principal_id
   role_definition_name = "AcrPull"
-  scope                = data.azurerm_container_registry.example.id
+  scope                = azurerm_container_registry.example.id
 }
 
 resource "azurerm_container_registry" "example" {
@@ -67,8 +67,8 @@ resource "azurerm_container_registry" "example" {
 # Container Group
 resource "azurerm_container_group" "example" {
   name                = "boltslackbotgroup"
-  location            = data.azurerm_resource_group.example.location
-  resource_group_name = data.azurerm_resource_group.example.name
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
   os_type             = "Linux"
 
   identity {
@@ -78,7 +78,7 @@ resource "azurerm_container_group" "example" {
 
   container {
     name   = "boltslackbot"
-    image  = "${data.azurerm_container_registry.example.login_server}/slack-bot:latest"
+    image  = "${azurerm_container_registry.example.login_server}/slack-bot:latest"
     cpu    = "1.0"
     memory = "1.5"
 
@@ -96,7 +96,7 @@ resource "azurerm_container_group" "example" {
     user_assigned_identity_id = azurerm_user_assigned_identity.managed_identity.id
     # username                  = var.acr_username
     # password                  = var.acr_password
-    server = data.azurerm_container_registry.example.login_server
+    server = azurerm_container_registry.example.login_server
   }
 }
 
