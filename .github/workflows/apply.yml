@@ -25,6 +25,11 @@ jobs:
       steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            /*
+            !/container_group
+          sparse-checkout-cone-mode: false
 
       - name: Terraform install
         uses: hashicorp/setup-terraform@v3
@@ -98,6 +103,11 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            /*
+            !/resource_group
+          sparse-checkout-cone-mode: false
 
       - name: Terraform install
         uses: hashicorp/setup-terraform@v3
