@@ -15,11 +15,11 @@ terraform {
   # Configuration for storing Terraform state remotely in an Azure storage account
 
   backend "azurerm" {
-    resource_group_name  = "terraform" # Resource group where the storage account is located
-    storage_account_name = "workflowstatefiles"            # Azure Storage account for storing the state file
-    container_name       = "slackbotstate"             # Blob container where the state file will be stored
-    key                  = "terraform.tfstate"        # Name of the Terraform state file
-    use_oidc             = true                       # Enable OIDC for authentication with Azure
+    resource_group_name  = "terraform"          # Resource group where the storage account is located
+    storage_account_name = "workflowstatefiles" # Azure Storage account for storing the state file
+    container_name       = "slackbotstate"      # Blob container where the state file will be stored
+    key                  = "terraform.tfstate"  # Name of the Terraform state file
+    use_oidc             = true                 # Enable OIDC for authentication with Azure
   }
 }
 
@@ -28,8 +28,8 @@ provider "azuread" {
 }
 
 provider "azurerm" {
-  features {}     # Enables the use of the AzureRM provider without additional config
-  use_oidc = true # OIDC authentication with Azure (useful for GitHub Actions)
+  features {}                              # Enables the use of the AzureRM provider without additional config
+  use_oidc                        = true   # OIDC authentication with Azure (useful for GitHub Actions)
   resource_provider_registrations = "none" # Disable automatic resource provider registrations
 }
 
@@ -40,7 +40,7 @@ data "azuread_service_principal" "sp" {
 # Define an Azure Resource Group for organizing resources
 resource "azurerm_resource_group" "rg" {
   name     = "slack-bot-rg"     # Name of the resource group
-  location = "australiacentral" # Azure region where the resource group is located
+  location = "australiaeast" # Azure region where the resource group is located
 }
 
 # Managed Identity
@@ -95,9 +95,7 @@ resource "azurerm_container_group" "example" {
 
   image_registry_credential {
     user_assigned_identity_id = azurerm_user_assigned_identity.managed_identity.id
-    # username                  = var.acr_username
-    # password                  = var.acr_password
-    server = azurerm_container_registry.example.login_server
+    server                    = azurerm_container_registry.example.login_server
   }
 }
 
