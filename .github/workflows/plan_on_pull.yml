@@ -19,8 +19,9 @@ env:
   ARM_SUBSCRIPTION_ID: "${{ secrets.AZURE_SUBSCRIPTION_ID }}"
   AZURE_CLIENT_SECRET: "${{ secrets.AZURE_CLIENT_SECRET }}"
   ARM_TENANT_ID: "${{ secrets.AZURE_TENANT_ID }}"
-  SLACK_BOT_TOKEN: "${{ secrets.SLACK_BOT_TOKEN }}"
-  SLACK_APP_TOKEN: "${{ secrets.SLACK_APP_TOKEN }}"
+  TF_VAR_slack_bot_token: "${{ secrets.SLACK_BOT_TOKEN }}"
+  TF_VAR_slack_app_token: "${{ secrets.SLACK_APP_TOKEN }}"
+
 
 jobs:
   terraform-plan-policy-check:
@@ -38,7 +39,7 @@ jobs:
       run: terraform init -reconfigure
 
     - name: Terraform Plan
-      run: terraform plan -out "tfplan"
+      run: terraform plan -out "tfplan" -var="slack_app_token=${{ secrets.SLACK_APP_TOKEN }}" -var="slack_bot_token=${{ secrets.SLACK_BOT_TOKEN }}"
 
     - name: Convert Terraform Plan to JSON
       run: terraform show -json tfplan | grep '^{.*}$' > tfplan.json
