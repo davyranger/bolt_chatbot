@@ -43,7 +43,7 @@ jobs:
 
     - name: Terraform Init
       run: terraform init -reconfigure
-      working-directory: bolt_chatbot/resource_group
+      working-directory: ./resource_group
 
     - name: Terraform Plan
       run: terraform plan -out "tfplan" -var="slack_app_token=${{ secrets.SLACK_APP_TOKEN }}" -var="slack_bot_token=${{ secrets.SLACK_BOT_TOKEN }}"
