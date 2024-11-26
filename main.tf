@@ -44,6 +44,7 @@ resource "azurerm_resource_group" "rg" {
 }
 
 # Managed Identity
+
 resource "azurerm_user_assigned_identity" "managed_identity" {
   name                = "slackbot-identity"
   location            = azurerm_resource_group.rg.location
