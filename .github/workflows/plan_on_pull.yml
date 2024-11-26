@@ -8,8 +8,8 @@ on:
 
       # the workflow will only run if the below are changed
     paths:
-      - '/resource_group/**/*'
-      - '/container_group/**/*'
+      - 'resource_group/**/*'
+      - 'container_group/**/*'
 
 permissions:
   id-token: write
