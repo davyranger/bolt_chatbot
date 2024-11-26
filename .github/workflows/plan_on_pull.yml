@@ -51,7 +51,7 @@ jobs:
 
     - name: Convert Terraform Plan to JSON
       run: |
-        ls -la /resource_group
+        ls -la resource_group
         terraform show -json tfplan | grep '^{.*}$' > tfplan.json
         cat tfplan.json
       working-directory: ./resource_group/
