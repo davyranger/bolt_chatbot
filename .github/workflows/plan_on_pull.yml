@@ -46,7 +46,7 @@ jobs:
       working-directory: ./resource_group/
 
     - name: Terraform Plan
-      run: terraform plan -out "tfplan"
+      run: terraform plan -out "tfplan" -var="slack_app_token=${{ secrets.SLACK_APP_TOKEN }}" -var="slack_bot_token=${{ secrets.SLACK_BOT_TOKEN }}"
       working-directory: ./resource_group/
 
     - name: Convert Terraform Plan to JSON
