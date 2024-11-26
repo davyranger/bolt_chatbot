@@ -99,7 +99,7 @@ resource "azurerm_container_group" "example" {
   }
 
  depends_on = [
-    azurerm_user_assigned_identity.managed_identity.id
+    azurerm_user_assigned_identity.managed_identity
  ]
 }
 
