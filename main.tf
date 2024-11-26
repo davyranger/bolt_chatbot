@@ -97,6 +97,10 @@ resource "azurerm_container_group" "example" {
     user_assigned_identity_id = azurerm_user_assigned_identity.managed_identity.id
     server                    = azurerm_container_registry.example.login_server
   }
+
+ depends_on = [
+    azurerm_user_assigned_identity.managed_identity
+ ]
 }
 
 
