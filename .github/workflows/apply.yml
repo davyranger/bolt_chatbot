@@ -33,7 +33,7 @@ jobs:
         run: terraform init -reconfigure
 
       - name: Terraform Plan
-        run: terraform plan -out "tfplan"
+        run: terraform plan -out "tfplan" -var="slack_app_token=${{ secrets.SLACK_APP_TOKEN }}" -var="slack_bot_token=${{ secrets.SLACK_BOT_TOKEN }}"
 
       - name: Convert Terraform Plan to JSON
         run: terraform show -json tfplan | grep '^{.*}$' > tfplan.json
