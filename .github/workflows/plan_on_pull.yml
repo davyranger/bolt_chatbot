@@ -51,6 +51,7 @@ jobs:
 
     - name: Convert Terraform Plan to JSON
       run: terraform show -json tfplan | grep '^{.*}$' > tfplan.json
+      working-directory: ./resource_group
 
     - name: Setup OPA
       uses: open-policy-agent/setup-opa@v2
