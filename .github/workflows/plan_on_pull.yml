@@ -64,11 +64,13 @@ jobs:
         result=$(opa eval --data .github/workflows/terraform.rego --input tfplan.json "data.terraform.analysis.authz" --format=json | jq '.result[0].expressions[0].value')
         echo $result
       continue-on-error: false
+      working-directory: ./resource_group/
     
     - name: Run OPA Score Policy Check
       id: opa-score-check
       run: opa eval --data .github/workflows/terraform.rego --input tfplan.json "data.terraform.analysis.score"
       continue-on-error: false
+      working-directory: ./resource_group/
 
 
       
