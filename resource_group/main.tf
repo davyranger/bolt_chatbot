@@ -42,7 +42,7 @@ resource "azurerm_resource_group" "rg" {
   location = "australiaeast" # Azure region where the resource group is located
 }
 
-resource "azurerm_resource_group" "rg" {
+resource "azurerm_resource_group" "rgg" {
   name     = "slack-bot-rgg"  # Name of the resource group
   location = "australiaeast" # Azure region where the resource group is located
 }
