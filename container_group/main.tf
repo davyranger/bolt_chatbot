@@ -17,7 +17,7 @@ terraform {
   backend "azurerm" {
     resource_group_name  = "terraform"          # Resource group where the storage account is located
     storage_account_name = "workflowstatefiles" # Azure Storage account for storing the state file
-    container_name       = "slackbotstate"      # Blob container where the state file will be stored
+    container_name       = "containerstate"     # Blob container where the state file will be stored
     key                  = "terraform.tfstate"  # Name of the Terraform state file
     use_oidc             = true                 # Enable OIDC for authentication with Azure
   }
@@ -37,9 +37,14 @@ data "azuread_service_principal" "sp" {
   object_id = "fddda90e-aa3d-414c-97a3-b30a56ecbbf3"
 }
 
+data "azurerm_container_registry" "example" {
+  name                = "boltslackbotacr"
+  resource_group_name = "slack-bot-rg"
+}
+
 # Define an Azure Resource Group for organizing resources
-resource "azurerm_resource_group" "rg" {
-  name     = "slack-bot-rg"     # Name of the resource group
+resource "azurerm_resource_group" "container_rg" {
+  name     = "container-rg"  # Name of the resource group
   location = "australiaeast" # Azure region where the resource group is located
 }
 
@@ -47,22 +52,15 @@ resource "azurerm_resource_group" "rg" {
 
 resource "azurerm_user_assigned_identity" "managed_identity" {
   name                = "slackbot-identity"
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
+  location            = azurerm_resource_group.container_rg.location
+  resource_group_name = azurerm_resource_group.container_rg.name
 }
 
 # Role Assignments
 resource "azurerm_role_assignment" "acr_pull" {
   principal_id         = azurerm_user_assigned_identity.managed_identity.principal_id
   role_definition_name = "AcrPull"
-  scope                = azurerm_container_registry.example.id
-}
-
-resource "azurerm_container_registry" "example" {
-  name                = "boltslackbotacr"
-  resource_group_name = azurerm_resource_group.rg.name
-  location            = azurerm_resource_group.rg.location
-  sku                 = "Standard"
+  scope                = data.azurerm_container_registry.example.id
 }
 
 # Container Group
@@ -95,12 +93,12 @@ resource "azurerm_container_group" "example" {
 
   image_registry_credential {
     user_assigned_identity_id = azurerm_user_assigned_identity.managed_identity.id
-    server                    = azurerm_container_registry.example.login_server
+    server                    = data.azurerm_container_registry.example.login_server
   }
 
- depends_on = [
+  depends_on = [
     azurerm_user_assigned_identity.managed_identity
- ]
+  ]
 }
 
 
