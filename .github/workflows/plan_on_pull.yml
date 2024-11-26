@@ -8,8 +8,8 @@ on:
 
       # the workflow will only run if the below are changed
     paths:
-      - 'bolt_chatbot/resource_group/**/*'
-      - 'bolt_chatbot/container_group/**/*'
+      - '/resource_group/**/*'
+      - '/container_group/**/*'
 
 permissions:
   id-token: write
@@ -35,7 +35,7 @@ jobs:
       with:
         sparse-checkout: |
           /*
-          !bolt_chatbot/container_group/**
+          !container_group/**
         sparse-checkout-cone-mode: false
 
     - name: Terraform install
