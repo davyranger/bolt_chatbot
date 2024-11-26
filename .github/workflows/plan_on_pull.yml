@@ -5,10 +5,11 @@ on:
     # will target all branches except the below (only use branches or branches-ignore)
     branches:
       - main
-     
-    paths:
+
       # the workflow will only run if the below are changed
-      - '/resource_group/*'
+    paths:
+      - 'bolt_chatbot/resource_group/**/*'
+      - 'bolt_chatbot/container_group/**/*'
 
 permissions:
   id-token: write
@@ -34,7 +35,7 @@ jobs:
       with:
         sparse-checkout: |
           /*
-          !/container_group
+          !bolt_chatbot/container_group/**
         sparse-checkout-cone-mode: false
 
     - name: Terraform install
