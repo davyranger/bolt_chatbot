@@ -12,8 +12,7 @@ terraform {
 
   required_version = "~> 1.9.0"
 
-  # Configuration for storing Terraform state remotely in an Azure storage account
-
+  ## Configuration for storing Terraform state remotely in an Azure storage account
   backend "azurerm" {
     resource_group_name  = "terraform"          # Resource group where the storage account is located
     storage_account_name = "workflowstatefiles" # Azure Storage account for storing the state file
@@ -39,23 +38,13 @@ data "azuread_service_principal" "sp" {
 
 # Define an Azure Resource Group for organizing resources
 resource "azurerm_resource_group" "rg" {
-  name     = "slack-bot-rg"     # Name of the resource group
+  name     = "slack-bot-rg"  # Name of the resource group
   location = "australiaeast" # Azure region where the resource group is located
 }
 
-# Managed Identity
-
-resource "azurerm_user_assigned_identity" "managed_identity" {
-  name                = "slackbot-identity"
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
-}
-
-# Role Assignments
-resource "azurerm_role_assignment" "acr_pull" {
-  principal_id         = azurerm_user_assigned_identity.managed_identity.principal_id
-  role_definition_name = "AcrPull"
-  scope                = azurerm_container_registry.example.id
+resource "azurerm_resource_group" "rgg" {
+  name     = "slack-bot-rgg"  # Name of the resource group
+  location = "australiaeast" # Azure region where the resource group is located
 }
 
 resource "azurerm_container_registry" "example" {
@@ -64,43 +53,4 @@ resource "azurerm_container_registry" "example" {
   location            = azurerm_resource_group.rg.location
   sku                 = "Standard"
 }
-
-# Container Group
-resource "azurerm_container_group" "example" {
-  name                = "boltslackbotgroup"
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
-  os_type             = "Linux"
-
-  identity {
-    type         = "UserAssigned"
-    identity_ids = [azurerm_user_assigned_identity.managed_identity.id]
-  }
-
-  container {
-    name   = "boltslackbot"
-    image  = "${azurerm_container_registry.example.login_server}/slack-bot:latest"
-    cpu    = "1.0"
-    memory = "1.5"
-
-    ports {
-      port = 80
-    }
-
-    environment_variables = {
-      SLACK_BOT_TOKEN = var.slack_bot_token
-      SLACK_APP_TOKEN = var.slack_app_token
-    }
-  }
-
-  image_registry_credential {
-    user_assigned_identity_id = azurerm_user_assigned_identity.managed_identity.id
-    server                    = azurerm_container_registry.example.login_server
-  }
-
- depends_on = [
-    azurerm_user_assigned_identity.managed_identity
- ]
-}
-
 
