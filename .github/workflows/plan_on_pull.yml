@@ -51,7 +51,6 @@ jobs:
 
     - name: Convert Terraform Plan to JSON
       run: |
-        ls -la resource_group
         terraform show -json tfplan | grep '^{.*}$' > tfplan.json
         cat tfplan.json
       working-directory: ./resource_group/
@@ -64,13 +63,13 @@ jobs:
     - name: Run OPA Authz Policy Check
       id: opa-authz-check
       run: |
-        result=$(opa eval --data .github/workflows/terraform.rego --input tfplan.json "data.terraform.analysis.authz" --format=json | jq '.result[0].expressions[0].value')
+        result=$(opa eval --data .github/workflows/terraform.rego --input ./resource_group/tfplan.json "data.terraform.analysis.authz" --format=json | jq '.result[0].expressions[0].value')
         echo $result
       continue-on-error: false
     
     - name: Run OPA Score Policy Check
       id: opa-score-check
-      run: opa eval --data .github/workflows/terraform.rego --input tfplan.json "data.terraform.analysis.score"
+      run: opa eval --data .github/workflows/terraform.rego --input ./resource_group/tfplan.json "data.terraform.analysis.score"
       continue-on-error: false
 
 
