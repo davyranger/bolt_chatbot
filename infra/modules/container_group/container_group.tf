@@ -7,12 +7,12 @@ resource "azurerm_role_assignment" "acr_pull" {
 resource "azurerm_container_group" "example" {
   name                = "boltslackbotgroup"
   location            = "australiaeast"
-  resource_group_name = var.resource_group
+  resource_group_name = "slack-bot-rg"
   os_type             = "Linux"
 
   identity {
     type         = "UserAssigned"
-    identity_ids = [var.user_assigned_id]
+    identity_ids = ["/subscriptions/54d76c1b-a9fe-4b89-93cb-2585ce0dacb9/resourceGroups/slack-bot-rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/slackbot-identity"]
   }
 
   container {
@@ -32,7 +32,7 @@ resource "azurerm_container_group" "example" {
   }
 
   image_registry_credential {
-    user_assigned_identity_id = var.user_assigned_id
+    user_assigned_identity_id = "/subscriptions/54d76c1b-a9fe-4b89-93cb-2585ce0dacb9/resourceGroups/slack-bot-rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/slackbot-identity"
     server                    = var.container_registry
   }
 }
