@@ -12,10 +12,10 @@ variable "resource_group_location" {
   description = "Resource Group Location"
   type        = string
 }
-variable "user_assigned_id" {
-  description = "User Assigned Identity Principal ID"
-  type        = string
-}
+# variable "user_assigned_id" {
+#   description = "User Assigned Identity Principal ID"
+#   type        = string
+# }
 variable "container_registry" {
   description = "Container Registry ID"
   type        = string
