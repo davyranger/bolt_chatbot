@@ -12,7 +12,7 @@ resource "azurerm_container_group" "example" {
 
   identity {
     type         = "UserAssigned"
-    identity_ids = [var.uai_client_id]
+    identity_ids = ["/subscriptions/12345678-1234-9876-4563-123456789012/resourceGroups/example-resource-group/providers/Microsoft.ManagedIdentity/userAssignedIdentities/${var.uai_client_id}"]
   }
 
   container {
