@@ -1,7 +1,13 @@
 resource "azurerm_role_assignment" "acr_pull" {
-  principal_id         = var.user_assigned_id
+  principal_id         = azurerm_user_assigned_identity.managed_identity.id
   role_definition_name = "AcrPull"
-  scope                = var.resource_group
+  scope                = var.resource_group_id
+}
+
+resource "azurerm_user_assigned_identity" "managed_identity" {
+  name                = "slackbot-identity"
+  location            = var.resource_group_location
+  resource_group_name = var.resource_group_name
 }
 
 resource "azurerm_container_group" "example" {
@@ -12,7 +18,7 @@ resource "azurerm_container_group" "example" {
 
   identity {
     type         = "UserAssigned"
-    identity_ids = ["/subscriptions/${var.azure_subscription_id}/resourceGroups/slack-bot-rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/slackbot-identity"]
+    identity_ids = [azurerm_user_assigned_identity.managed_identity.id]
   }
 
   container {
@@ -32,7 +38,7 @@ resource "azurerm_container_group" "example" {
   }
 
   image_registry_credential {
-    user_assigned_identity_id = "/subscriptions/54d76c1b-a9fe-4b89-93cb-2585ce0dacb9/resourceGroups/slack-bot-rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/slackbot-identity"
+    user_assigned_identity_id = azurerm_user_assigned_identity.managed_identity.id
     server                    = "boltslackbotacr.azurecr.io"
   }
 }

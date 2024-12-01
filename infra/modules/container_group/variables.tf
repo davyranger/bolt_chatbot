@@ -1,11 +1,21 @@
-variable "resource_group" {
+variable "resource_group_id" {
   description = "Resource Group ID"
   type        = string
 }
-variable "user_assigned_id" {
-  description = "User Assigned Identity Principal ID"
+
+variable "resource_group_name" {
+  description = "Resource Group Name"
   type        = string
 }
+
+variable "resource_group_location" {
+  description = "Resource Group Location"
+  type        = string
+}
+# variable "user_assigned_id" {
+#   description = "User Assigned Identity Principal ID"
+#   type        = string
+# }
 variable "container_registry" {
   description = "Container Registry ID"
   type        = string
