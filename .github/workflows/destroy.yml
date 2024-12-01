@@ -34,6 +34,7 @@ jobs:
 
     - name: Terraform Init
       run: terraform init
+      working-directory: ./infra/parent_directory/
 
     - name: Terraform Plan
       run: |
@@ -42,6 +43,8 @@ jobs:
           -var="slack_app_token=${{ secrets.SLACK_APP_TOKEN }}" \
           -out "tfplan"
       timeout-minutes: 5
+      working-directory: ./infra/parent_directory/
 
     - name: Terraform Destroy
       run: terraform destroy -auto-approve -input=false
+      working-directory: ./infra/parent_directory/
