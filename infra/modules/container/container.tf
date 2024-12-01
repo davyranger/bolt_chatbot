@@ -16,29 +16,51 @@ resource "azurerm_container_registry" "example" {
   sku                 = "Standard"
 }
 
+# Define a null resource named "docker_build_push"
+# This resource does not create or manage any infrastructure but is used to run local commands.
 resource "null_resource" "docker_build_push" {
+
+  # Use the "local-exec" provisioner to execute shell commands locally on the machine where Terraform is run.
   provisioner "local-exec" {
+
+    # Define the shell command to log in to Azure, set the subscription, log in to ACR, build a Docker image, and push it to ACR.
     command = <<EOT
+      # Log in to Azure using service principal credentials.
       az login --service-principal -u "$AZURE_CLIENT_ID" -p "$AZURE_CLIENT_SECRET" --tenant "$AZURE_TENANT_ID"
+
+      # Set the active Azure subscription.
       az account set --subscription "$AZURE_SUBSCRIPTION_ID"
+
+      # Log in to the Azure Container Registry (ACR) specified by its name.
       az acr login --name boltslackbotacr
+
+      # Build the Docker image with arguments for Slack bot tokens, tagging it with the repository and tag.
       docker build \
         --build-arg SLACK_BOT_TOKEN="$SLACK_BOT_TOKEN" \
         --build-arg SLACK_APP_TOKEN="$SLACK_APP_TOKEN" \
         -t boltslackbotacr.azurecr.io/slack-bot:latest .
+
+      # Push the built Docker image to the Azure Container Registry (ACR).
       docker push boltslackbotacr.azurecr.io/slack-bot:latest
     EOT
+
+    # Define environment variables for the shell command.
     environment = {
-      AZURE_CLIENT_ID        = var.azure_client_id
-      AZURE_CLIENT_SECRET    = var.azure_client_secret
-      AZURE_TENANT_ID        = var.azure_tenant_id
-      AZURE_SUBSCRIPTION_ID  = var.azure_subscription_id
-      SLACK_BOT_TOKEN        = var.slack_bot_token
-      SLACK_APP_TOKEN        = var.slack_app_token
+      # Azure credentials and configuration variables for authentication and resource access.
+      AZURE_CLIENT_ID        = var.azure_client_id       # Azure service principal client ID.
+      AZURE_CLIENT_SECRET    = var.azure_client_secret   # Azure service principal client secret.
+      AZURE_TENANT_ID        = var.azure_tenant_id       # Azure tenant ID.
+      AZURE_SUBSCRIPTION_ID  = var.azure_subscription_id # Azure subscription ID.
+
+      # Slack bot tokens used as build arguments for the Docker image.
+      SLACK_BOT_TOKEN        = var.slack_bot_token       # Slack bot token for authentication.
+      SLACK_APP_TOKEN        = var.slack_app_token       # Slack app token for authentication.
     }
   }
 
+  # Define a dependency on the Azure Container Registry (ACR) resource to ensure it exists before running this resource.
   depends_on = [
-    azurerm_container_registry.example
+    azurerm_container_registry.example # Replace "example" with the actual resource name of your ACR.
   ]
 }
+
