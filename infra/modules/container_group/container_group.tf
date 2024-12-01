@@ -1,5 +1,5 @@
 resource "azurerm_role_assignment" "acr_pull" {
-  principal_id         = azurerm_user_assigned_identity.managed_identity.id
+  principal_id         = azurerm_user_assigned_identity.managed_identity.principal_id
   role_definition_name = "AcrPull"
   scope                = var.resource_group_id
 }
