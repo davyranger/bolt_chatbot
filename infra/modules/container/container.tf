@@ -47,14 +47,14 @@ resource "null_resource" "docker_build_push" {
     # Define environment variables for the shell command.
     environment = {
       # Azure credentials and configuration variables for authentication and resource access.
-      AZURE_CLIENT_ID        = var.azure_client_id       # Azure service principal client ID.
-      AZURE_CLIENT_SECRET    = var.azure_client_secret   # Azure service principal client secret.
-      AZURE_TENANT_ID        = var.azure_tenant_id       # Azure tenant ID.
-      AZURE_SUBSCRIPTION_ID  = var.azure_subscription_id # Azure subscription ID.
+      AZURE_CLIENT_ID       = var.azure_client_id       # Azure service principal client ID.
+      AZURE_CLIENT_SECRET   = var.azure_client_secret   # Azure service principal client secret.
+      AZURE_TENANT_ID       = var.azure_tenant_id       # Azure tenant ID.
+      AZURE_SUBSCRIPTION_ID = var.azure_subscription_id # Azure subscription ID.
 
       # Slack bot tokens used as build arguments for the Docker image.
-      SLACK_BOT_TOKEN        = var.slack_bot_token       # Slack bot token for authentication.
-      SLACK_APP_TOKEN        = var.slack_app_token       # Slack app token for authentication.
+      SLACK_BOT_TOKEN = var.slack_bot_token # Slack bot token for authentication.
+      SLACK_APP_TOKEN = var.slack_app_token # Slack app token for authentication.
     }
   }
 
