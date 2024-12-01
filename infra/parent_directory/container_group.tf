@@ -5,6 +5,7 @@ module "container_group" {
   container_registry = module.container.cg_id
   slack_bot_token    = var.slack_bot_token
   slack_app_token    = var.slack_app_token
+  sunscription_id    = data.azurerm_subscription.current.subscription_id
 
   depends_on = [
     module.container
