@@ -38,8 +38,15 @@ jobs:
       working-directory: ./infra/parent_directory/
 
     - name: Terraform Plan
-      run: terraform plan -out "tfplan" -var="slack_app_token=${{ secrets.SLACK_APP_TOKEN }}" -var="slack_bot_token=${{ secrets.SLACK_BOT_TOKEN }}"
+      run: terraform plan -out "tfplan" \
+        -var="slack_app_token=${{ secrets.SLACK_APP_TOKEN }}" \
+        -var="slack_bot_token=${{ secrets.SLACK_BOT_TOKEN }}" \
+        -var="azure_client_id=${{ secrets.AZURE_CLIENT_ID }}" \
+        -var="azure_client_secret=${{ secrets.AZURE_CLIENT_SECRET }}" \
+        -var="azure_tenant_id=${{ secrets.AZURE_TENANT_ID }}" \
+        -var="azure_subscription_id=${{ secrets.AZURE_SUBSCRIPTION_ID }}"
       working-directory: ./infra/parent_directory/
+
 
     - name: Convert Terraform Plan to JSON
       run: terraform show -json tfplan | grep '^{.*}$' > tfplan.json
