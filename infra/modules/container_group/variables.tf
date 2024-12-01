@@ -22,9 +22,3 @@ variable "slack_app_token" {
   type        = string
   sensitive   = true # Marks this as sensitive to prevent showing in logs
 }
-
-variable "subscription_id" {
-  description = "Azure Subscription ID"
-  type        = string
-  sensitive   = true # Marks this as sensitive to prevent showing in logs
-}
