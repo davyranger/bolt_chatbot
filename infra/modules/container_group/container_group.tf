@@ -41,4 +41,8 @@ resource "azurerm_container_group" "example" {
     user_assigned_identity_id = azurerm_user_assigned_identity.managed_identity.id
     server                    = "boltslackbotacr.azurecr.io"
   }
+
+  depends_on = [
+    azurerm_user_assigned_identity.managed_identity
+  ]
 }
