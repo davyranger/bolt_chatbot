@@ -1,5 +1,15 @@
-variable "resource_group" {
+variable "resource_group_id" {
   description = "Resource Group ID"
+  type        = string
+}
+
+variable "resource_group_name" {
+  description = "Resource Group Name"
+  type        = string
+}
+
+variable "resource_group_location" {
+  description = "Resource Group Location"
   type        = string
 }
 variable "user_assigned_id" {
