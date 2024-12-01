@@ -3,7 +3,7 @@ output "rg_id" {
 }
 
 output "uai_id" {
-  value = azurerm_user_assigned_identity.managed_identity.id
+  value = azurerm_user_assigned_identity.managed_identity.principal_id
 }
 
 output "cg_id" {
