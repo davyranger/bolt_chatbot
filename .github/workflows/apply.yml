@@ -65,6 +65,7 @@ jobs:
       - name: Terraform Apply
         if: env.result == 'true'
         run: terraform apply -auto-approve
+        working-directory: ./infra/parent_directory/
 
   docker-build-push:
       runs-on: ubuntu-latest
