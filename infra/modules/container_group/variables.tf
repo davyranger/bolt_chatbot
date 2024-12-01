@@ -7,6 +7,11 @@ variable "user_assigned_id" {
   type        = string
 }
 
+variable "uai_client_id" {
+  description = "User Assigned Identity Client ID"
+  type        = string
+}
+
 variable "container_registry" {
   description = "Container Registry ID"
   type        = string

@@ -12,7 +12,7 @@ resource "azurerm_container_group" "example" {
 
   identity {
     type         = "UserAssigned"
-    identity_ids = [var.user_assigned_id]
+    identity_ids = [var.uai_client_id]
   }
 
   container {
