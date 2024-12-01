@@ -9,4 +9,3 @@ variable "slack_app_token" {
   type        = string
   sensitive   = true # Marks this as sensitive to prevent showing in logs
 }
-
