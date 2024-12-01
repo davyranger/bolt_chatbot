@@ -35,8 +35,4 @@ resource "azurerm_container_group" "example" {
     user_assigned_identity_id = var.user_assigned_id
     server                    = var.container_registry
   }
-
-  depends_on = [
-    azurerm_user_assigned_identity.managed_identity
-  ]
 }
