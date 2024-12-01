@@ -31,18 +31,25 @@ jobs:
 
     - name: Terraform install
       uses: hashicorp/setup-terraform@v3
+      with:
+        terraform_version: "1.9.8"
+
+    - name: Set environment variables
+      run: |
+        echo "TF_VAR_azure_client_id=${{ secrets.AZURE_CLIENT_ID }}" >> $GITHUB_ENV
+        echo "TF_VAR_azure_client_secret=${{ secrets.AZURE_CLIENT_SECRET }}" >> $GITHUB_ENV
+        echo "TF_VAR_azure_tenant_id=${{ secrets.AZURE_TENANT_ID }}" >> $GITHUB_ENV
+        echo "TF_VAR_azure_subscription_id=${{ secrets.AZURE_SUBSCRIPTION_ID }}" >> $GITHUB_ENV
+        echo "TF_VAR_slack_bot_token=${{ secrets.SLACK_BOT_TOKEN }}" >> $GITHUB_ENV
+        echo "TF_VAR_slack_app_token=${{ secrets.SLACK_APP_TOKEN }}" >> $GITHUB_ENV
+
 
     - name: Terraform Init
       run: terraform init
       working-directory: ./infra/parent_directory/
 
     - name: Terraform Plan
-      run: |
-        terraform plan \
-          -var="slack_bot_token=${{ secrets.SLACK_BOT_TOKEN }}" \
-          -var="slack_app_token=${{ secrets.SLACK_APP_TOKEN }}" \
-          -out "tfplan"
-      timeout-minutes: 5
+      run: terraform plan -out "tfplan" -var="slack_app_token=${{ secrets.SLACK_APP_TOKEN }}" -var="slack_bot_token=${{ secrets.SLACK_BOT_TOKEN }}" -var="azure_client_id=${{ secrets.AZURE_CLIENT_ID }}" -var="azure_client_secret=${{ secrets.AZURE_CLIENT_SECRET }}" -var="azure_tenant_id=${{ secrets.AZURE_TENANT_ID }}" -var="azure_subscription_id=${{ secrets.AZURE_SUBSCRIPTION_ID }}"
       working-directory: ./infra/parent_directory/
 
     - name: Terraform Destroy
