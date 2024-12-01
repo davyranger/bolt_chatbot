@@ -32,3 +32,8 @@ provider "azurerm" {
   use_oidc                        = true   # OIDC authentication with Azure (useful for GitHub Actions)
   resource_provider_registrations = "none" # Disable automatic resource provider registrations
 }
+
+import {
+  id = "/subscriptions/54d76c1b-a9fe-4b89-93cb-2585ce0dacb9/resourceGroups/slack-bot-rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/slackbot-identity"
+  to = module.container_group.azurerm_user_assigned_identity.managed_identity
+}
