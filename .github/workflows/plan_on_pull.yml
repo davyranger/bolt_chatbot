@@ -18,7 +18,6 @@ env:
   SLACK_BOT_TOKEN: "${{ secrets.SLACK_BOT_TOKEN }}"
   SLACK_APP_TOKEN: "${{ secrets.SLACK_APP_TOKEN }}"
 
-
 jobs:
   terraform-plan-policy-check:
     runs-on: ubuntu-latest
