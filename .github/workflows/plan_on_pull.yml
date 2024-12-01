@@ -5,10 +5,6 @@ on:
     # will target all branches except the below (only use branches or branches-ignore)
     branches:
       - main
-     
-    paths:
-      # the workflow will only run if the below are changed
-      - 'main.tf'
 
 permissions:
   id-token: write
@@ -37,6 +33,7 @@ jobs:
 
     - name: Terraform Init
       run: terraform init -reconfigure
+      working-directory: ./infra/parent-policy-assign-define/
 
     - name: Terraform Plan
       run: terraform plan -out "tfplan" -var="slack_app_token=${{ secrets.SLACK_APP_TOKEN }}" -var="slack_bot_token=${{ secrets.SLACK_BOT_TOKEN }}"
