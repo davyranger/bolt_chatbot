@@ -25,7 +25,7 @@ resource "null_resource" "docker_build_push" {
       docker build \
         --build-arg SLACK_BOT_TOKEN="$SLACK_BOT_TOKEN" \
         --build-arg SLACK_APP_TOKEN="$SLACK_APP_TOKEN" \
-        -t boltslackbotacr.azurecr.io/slack-bot:latest bolt_chatbot/infra/modules/container
+        -t boltslackbotacr.azurecr.io/slack-bot:latest ./infra/modules/container
       docker push boltslackbotacr.azurecr.io/slack-bot:latest
     EOT
     environment = {
