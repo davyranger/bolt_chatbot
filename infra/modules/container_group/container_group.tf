@@ -7,7 +7,7 @@ resource "azurerm_role_assignment" "acr_pull" {
 resource "azurerm_container_group" "example" {
   name                = "boltslackbotgroup"
   location            = "australiaeast"
-  resource_group_name = var.resource_group
+  resource_group_name = "slack-bot-rg"
   os_type             = "Linux"
 
   identity {
