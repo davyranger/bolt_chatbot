@@ -32,7 +32,7 @@ resource "azurerm_container_group" "example" {
   }
 
   image_registry_credential {
-    user_assigned_identity_id = var.user_assigned_id
+    user_assigned_identity_id = "/subscriptions/54d76c1b-a9fe-4b89-93cb-2585ce0dacb9/resourceGroups/slack-bot-rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/slackbot-identity"
     server                    = var.container_registry
   }
 }
