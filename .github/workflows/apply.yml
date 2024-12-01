@@ -51,7 +51,7 @@ jobs:
       - name: Run OPA Authz Policy Check
         id: opa-authz-check
         run: |
-          result=$(opa eval --data .github/workflows/terraform.rego --input working-directory: ./infra/parent_directory/tfplan.json "data.terraform.analysis.authz" --format=json | jq '.result[0].expressions[0].value')
+          result=$(opa eval --data .github/workflows/terraform.rego --input ./infra/parent_directory/tfplan.json "data.terraform.analysis.authz" --format=json | jq '.result[0].expressions[0].value')
           echo "result=$result" >> $GITHUB_ENV
           echo $result
         continue-on-error: false
@@ -59,7 +59,7 @@ jobs:
       - name: Run OPA Score Policy Check
         id: opa-score-check
         run: |
-          opa eval --data .github/workflows/terraform.rego --input working-directory: ./infra/parent_directory/tfplan.json "data.terraform.analysis.score"
+          opa eval --data .github/workflows/terraform.rego --input ./infra/parent_directory/tfplan.json "data.terraform.analysis.score"
         continue-on-error: false
       
       - name: Terraform Apply
@@ -134,7 +134,7 @@ jobs:
       - name: Run OPA Authz Policy Check
         id: opa-authz-check
         run: |
-          result=$(opa eval --data .github/workflows/terraform.rego --input working-directory: ./infra/parent_directory/tfplan.json "data.terraform.analysis.authz" --format=json | jq '.result[0].expressions[0].value')
+          result=$(opa eval --data .github/workflows/terraform.rego --input ./infra/parent_directory/tfplan.json "data.terraform.analysis.authz" --format=json | jq '.result[0].expressions[0].value')
           echo "result=$result" >> $GITHUB_ENV
           echo $result
         continue-on-error: false
@@ -142,7 +142,7 @@ jobs:
       - name: Run OPA Score Policy Check
         id: opa-score-check
         run: |
-          opa eval --data .github/workflows/terraform.rego --input working-directory: ./infra/parent_directory/tfplan.json "data.terraform.analysis.score"
+          opa eval --data .github/workflows/terraform.rego --input ./infra/parent_directory/tfplan.json "data.terraform.analysis.score"
         continue-on-error: false
 
       - name: Terraform Apply
