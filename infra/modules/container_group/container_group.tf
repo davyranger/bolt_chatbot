@@ -17,7 +17,7 @@ resource "azurerm_container_group" "example" {
 
   container {
     name   = "boltslackbot"
-    image  = "${var.container_registry}/slack-bot:latest"
+    image  = "boltslackbotacr.azurecr.io/slack-bot:latest"
     cpu    = "1.0"
     memory = "1.5"
 
