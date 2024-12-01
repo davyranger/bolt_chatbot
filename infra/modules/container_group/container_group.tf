@@ -12,7 +12,7 @@ resource "azurerm_container_group" "example" {
 
   identity {
     type         = "UserAssigned"
-    identity_ids = ["/subscriptions/54d76c1b-a9fe-4b89-93cb-2585ce0dacb9/resourceGroups/slack-bot-rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/slackbot-identity"]
+    identity_ids = ["/subscriptions/${azure_subscription_id}/resourceGroups/slack-bot-rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/slackbot-identity"]
   }
 
   container {
