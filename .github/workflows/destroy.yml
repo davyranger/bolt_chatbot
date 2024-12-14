@@ -12,7 +12,6 @@ permissions:
 env:
   ARM_CLIENT_ID: "${{ secrets.AZURE_CLIENT_ID }}"
   ARM_SUBSCRIPTION_ID: "${{ secrets.AZURE_SUBSCRIPTION_ID }}"
-  AZURE_CLIENT_SECRET: "${{ secrets.AZURE_CLIENT_SECRET }}"
   ARM_TENANT_ID: "${{ secrets.AZURE_TENANT_ID }}"
   SLACK_BOT_TOKEN: "${{ secrets.SLACK_BOT_TOKEN }}"
   SLACK_APP_TOKEN: "${{ secrets.SLACK_APP_TOKEN }}"
@@ -37,7 +36,6 @@ jobs:
     - name: Set environment variables
       run: |
         echo "TF_VAR_azure_client_id=${{ secrets.AZURE_CLIENT_ID }}" >> $GITHUB_ENV
-        echo "TF_VAR_azure_client_secret=${{ secrets.AZURE_CLIENT_SECRET }}" >> $GITHUB_ENV
         echo "TF_VAR_azure_tenant_id=${{ secrets.AZURE_TENANT_ID }}" >> $GITHUB_ENV
         echo "TF_VAR_azure_subscription_id=${{ secrets.AZURE_SUBSCRIPTION_ID }}" >> $GITHUB_ENV
         echo "TF_VAR_slack_bot_token=${{ secrets.SLACK_BOT_TOKEN }}" >> $GITHUB_ENV
@@ -49,7 +47,7 @@ jobs:
       working-directory: ./infra/parent_directory/
 
     - name: Terraform Plan
-      run: terraform plan -out "tfplan" -var="slack_app_token=${{ secrets.SLACK_APP_TOKEN }}" -var="slack_bot_token=${{ secrets.SLACK_BOT_TOKEN }}" -var="azure_client_id=${{ secrets.AZURE_CLIENT_ID }}" -var="azure_client_secret=${{ secrets.AZURE_CLIENT_SECRET }}" -var="azure_tenant_id=${{ secrets.AZURE_TENANT_ID }}" -var="azure_subscription_id=${{ secrets.AZURE_SUBSCRIPTION_ID }}"
+      run: terraform plan -out "tfplan" -var="slack_app_token=${{ secrets.SLACK_APP_TOKEN }}" -var="slack_bot_token=${{ secrets.SLACK_BOT_TOKEN }}" -var="azure_client_id=${{ secrets.AZURE_CLIENT_ID }}" -var="azure_tenant_id=${{ secrets.AZURE_TENANT_ID }}" -var="azure_subscription_id=${{ secrets.AZURE_SUBSCRIPTION_ID }}"
       working-directory: ./infra/parent_directory/
 
     - name: Terraform Destroy
