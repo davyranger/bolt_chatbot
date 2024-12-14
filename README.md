@@ -20,6 +20,10 @@ docker pull boltslackbotcontainerregistry.azurecr.io/slack-bot:latest
 
 docker run -p 3000:3000 -e SLACK_BOT_TOKEN=$SLACK_BOT_TOKEN -e SLACK_APP_TOKEN=$SLACK_APP_TOKEN boltslackbotcontainerregistry.azurecr.io/slack-bot:latest
 
+# Getting started with Bolt for Python
+
+https://tools.slack.dev/bolt-python/getting-started
+
 # Configuring OpenID Connect in Azure
 
 https://docs.github.com/en/actions/security-for-github-actions/security-hardening-your-deployments/configuring-openid-connect-in-azure
