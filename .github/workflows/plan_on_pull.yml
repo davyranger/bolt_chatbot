@@ -2,7 +2,6 @@ name: Azure Plan Workflow
 
 on:
   pull_request:
-    # will target all branches except the below (only use branches or branches-ignore)
     branches:
       - main
 
