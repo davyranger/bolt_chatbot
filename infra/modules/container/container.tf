@@ -42,7 +42,6 @@ resource "null_resource" "docker_build_push" {
     environment = {
       # Azure credentials and configuration variables for authentication and resource access.
       AZURE_CLIENT_ID       = var.azure_client_id       # Azure service principal client ID.
-      AZURE_CLIENT_SECRET   = var.azure_client_secret   # Azure service principal client secret.
       AZURE_TENANT_ID       = var.azure_tenant_id       # Azure tenant ID.
       AZURE_SUBSCRIPTION_ID = var.azure_subscription_id # Azure subscription ID.
 
