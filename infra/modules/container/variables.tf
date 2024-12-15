@@ -1,9 +1,9 @@
-variable "slack_app_token" {
+variable "slack_app_token_http" {
   type      = string
   sensitive = true
 }
 
-variable "slack_bot_token" {
+variable "slack_bot_token_http" {
   type      = string
   sensitive = true
 }
