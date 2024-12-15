@@ -20,7 +20,7 @@ resource "null_resource" "docker_build_push" {
     # Define the shell command to log in to Azure, set the subscription, log in to ACR, build a Docker image, and push it to ACR.
     command = <<EOT
       # Log in to Azure using service principal credentials.
-      az login --service-principal -u "CLIENT_ID" --tenant "TENANT_ID"
+      az login --service-principal -u "$AZURE_CLIENT_SECRET" --tenant "$AZURE_TENANT_ID"
 
       # Set the active Azure subscription.
       az account set --subscription "$AZURE_SUBSCRIPTION_ID"
