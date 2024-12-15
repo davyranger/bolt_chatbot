@@ -42,7 +42,7 @@ resource "azurerm_container_group" "example" {
     server                    = "boltslackbotacr.azurecr.io"
   }
 
-  # depends_on = [
-  #   azurerm_user_assigned_identity.managed_identity
-  # ]
+  depends_on = [
+    azurerm_role_assignment.acr_pull
+  ]
 }
