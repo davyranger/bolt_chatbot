@@ -15,7 +15,6 @@ resource "azurerm_container_group" "example" {
   location            = "australiaeast"
   resource_group_name = "slack-bot-rg"
   os_type             = "Linux"
-  exposed_port = []
 
   identity {
     type         = "UserAssigned"
@@ -28,9 +27,9 @@ resource "azurerm_container_group" "example" {
     cpu    = "1.0"
     memory = "1.5"
 
-    # ports {
-    #   port = 80
-    # }
+    ports {
+      port = 80
+    }
 
     environment_variables = {
       SLACK_BOT_TOKEN = var.slack_bot_token
