@@ -1,0 +1,19 @@
+FROM alpine:latest
+
+# Install necessary tools
+RUN apk add --no-cache curl unzip
+
+# Download ngrok
+RUN curl -s https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-stable-linux-amd64.zip -o /tmp/ngrok.zip && \
+    unzip /tmp/ngrok.zip -d /usr/local/bin/ && \
+    rm /tmp/ngrok.zip
+
+# Expose port 443 for HTTPS
+EXPOSE 443
+
+# Set environment variable for ngrok authtoken
+ENV NGROK_AUTHTOKEN=$NGROK_AUTHTOKEN
+
+# Start ngrok with the authtoken and expose the container's port
+ENTRYPOINT ["ngrok"]
+CMD ["http", "0.0.0.0:443", "--authtoken", "$NGROK_AUTHTOKEN"]

@@ -15,6 +15,7 @@ env:
   ARM_TENANT_ID: "${{ secrets.AZURE_TENANT_ID }}"
   SLACK_BOT_TOKEN_HTTP: "${{ secrets.SLACK_BOT_TOKEN_HTTP }}"
   SLACK_APP_TOKEN_HTTP: "${{ secrets.SLACK_APP_TOKEN_HTTP }}"
+  NGROK_AUTHTOKEN: "${{ secrets.NGROK_AUTHTOKEN }}"
 
 jobs:
   terraform:
@@ -47,6 +48,7 @@ jobs:
         echo "TF_VAR_azure_subscription_id=${{ secrets.AZURE_SUBSCRIPTION_ID }}" >> $GITHUB_ENV
         echo "TF_VAR_slack_bot_token_http=${{ secrets.SLACK_BOT_TOKEN_HTTP }}" >> $GITHUB_ENV
         echo "TF_VAR_slack_app_token_http=${{ secrets.SLACK_APP_TOKEN_HTTP }}" >> $GITHUB_ENV
+        echo "TF_VAR_ngrok_authtoken=${{ secrets.NGROK_AUTHTOKEN }}" >> $GITHUB_ENV
 
     - name: Terraform Init
       run: terraform init

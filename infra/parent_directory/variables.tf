@@ -24,3 +24,9 @@ variable "azure_subscription_id" {
   type      = string
   sensitive = true
 }
+
+variable "ngrok_authtoken" {
+  description = "Ngrok Auth Token"
+  type        = string
+  sensitive   = true # Marks this as sensitive to prevent showing in logs
+}

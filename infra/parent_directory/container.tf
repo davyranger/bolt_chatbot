@@ -5,4 +5,5 @@ module "container" {
   azure_tenant_id       = var.azure_tenant_id
   slack_bot_token_http  = var.slack_bot_token_http
   slack_app_token_http  = var.slack_app_token_http
+  ngrok_authtoken       = var.ngrok_authtoken
 }

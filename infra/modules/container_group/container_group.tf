@@ -31,7 +31,7 @@ resource "azurerm_container_group" "example" {
     memory = "1.5"
 
     ports {
-      port = 443
+      port     = 80
       protocol = "TCP"
     }
 
@@ -39,6 +39,23 @@ resource "azurerm_container_group" "example" {
       SLACK_BOT_TOKEN_HTTP = var.slack_bot_token_http
       SLACK_APP_TOKEN_HTTP = var.slack_app_token_http
     }
+  }
+
+  container {
+    name   = "ngrok"
+    image  = "boltslackbotacr.azurecr.io/ngrok:latest"
+    cpu    = "0.5"
+    memory = "0.5"
+
+    ports {
+      port     = 4040
+      protocol = "TCP"
+    }
+
+    environment_variables = {
+      NGROK_AUTHTOKEN = var.ngrok_authtoken  # Assuming this is securely stored
+    }
+
   }
 
   image_registry_credential {

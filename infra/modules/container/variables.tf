@@ -22,3 +22,8 @@ variable "azure_subscription_id" {
   type      = string
   sensitive = true
 }
+
+variable "ngrok_authtoken" {
+  type      = string
+  sensitive = true
+}
