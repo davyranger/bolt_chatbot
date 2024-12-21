@@ -32,3 +32,9 @@ https://docs.github.com/en/actions/security-for-github-actions/security-hardenin
 
 https://learn.microsoft.com/en-us/entra/workload-id/workload-identity-federation-create-trust?pivots=identity-wif-apps-methods-azp#configure-a-federated-identity-credential-on-an-app
 
+# variables
+
+### using, for example this - "echo "TF_VAR_azure_client_id=${{ secrets.AZURE_CLIENT_ID }}" >> $GITHUB_ENV"
+### means that you don't have to hardcode any values into a local terraform tfvars config file
+### The variable will be available for using in the github actions job
+
