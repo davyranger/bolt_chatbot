@@ -10,60 +10,60 @@ resource "azurerm_user_assigned_identity" "managed_identity" {
   resource_group_name = var.resource_group_name
 }
 
-# resource "azurerm_container_group" "example" {
-#   name                = "boltslackbotgroup"
-#   location            = "australiaeast"
-#   resource_group_name = "slack-bot-rg"
-#   os_type             = "Linux"
-#   ip_address_type     = "Public"
-#   dns_name_label      = "boltslackbot"
-#   restart_policy      = "Always"
+resource "azurerm_container_group" "example" {
+  name                = "boltslackbotgroup"
+  location            = "australiaeast"
+  resource_group_name = "slack-bot-rg"
+  os_type             = "Linux"
+  ip_address_type     = "Public"
+  dns_name_label      = "boltslackbot"
+  restart_policy      = "Always"
 
-#   identity {
-#     type         = "UserAssigned"
-#     identity_ids = [azurerm_user_assigned_identity.managed_identity.id]
-#   }
+  identity {
+    type         = "UserAssigned"
+    identity_ids = [azurerm_user_assigned_identity.managed_identity.id]
+  }
 
-#   container {
-#     name   = "boltslackbot"
-#     image  = "boltslackbotacr.azurecr.io/slack-bot:latest"
-#     cpu    = "1.0"
-#     memory = "1.5"
+  container {
+    name   = "boltslackbot"
+    image  = "boltslackbotacr.azurecr.io/slack-bot:latest"
+    cpu    = "1.0"
+    memory = "1.5"
 
-#     ports {
-#       port     = 80
-#       protocol = "TCP"
-#     }
+    ports {
+      port     = 80
+      protocol = "TCP"
+    }
 
-#     environment_variables = {
-#       SLACK_BOT_TOKEN_HTTP = var.slack_bot_token_http
-#       SLACK_APP_TOKEN_HTTP = var.slack_app_token_http
-#     }
-#   }
+    environment_variables = {
+      SLACK_BOT_TOKEN_HTTP = var.slack_bot_token_http
+      SLACK_APP_TOKEN_HTTP = var.slack_app_token_http
+    }
+  }
 
-#   container {
-#     name   = "ngrok"
-#     image  = "boltslackbotacr.azurecr.io/ngrok:latest"
-#     cpu    = "0.5"
-#     memory = "0.5"
+  container {
+    name   = "ngrok"
+    image  = "boltslackbotacr.azurecr.io/ngrok:latest"
+    cpu    = "0.5"
+    memory = "0.5"
 
-#     ports {
-#       port     = 4040
-#       protocol = "TCP"
-#     }
+    ports {
+      port     = 4040
+      protocol = "TCP"
+    }
 
-#     environment_variables = {
-#       NGROK_AUTHTOKEN = var.ngrok_authtoken # Assuming this is securely stored
-#     }
+    environment_variables = {
+      NGROK_AUTHTOKEN = var.ngrok_authtoken # Assuming this is securely stored
+    }
 
-#   }
+  }
 
-#   image_registry_credential {
-#     user_assigned_identity_id = azurerm_user_assigned_identity.managed_identity.id
-#     server                    = "boltslackbotacr.azurecr.io"
-#   }
+  image_registry_credential {
+    user_assigned_identity_id = azurerm_user_assigned_identity.managed_identity.id
+    server                    = "boltslackbotacr.azurecr.io"
+  }
 
-#   depends_on = [
-#     azurerm_role_assignment.acr_pull
-#   ]
-# }
+  depends_on = [
+    azurerm_role_assignment.acr_pull
+  ]
+}

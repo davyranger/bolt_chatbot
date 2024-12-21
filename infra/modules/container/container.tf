@@ -57,40 +57,40 @@ resource "null_resource" "docker_build_push" {
   ]
 }
 
-# resource "null_resource" "docker_build_push_ngrok" {
-#   provisioner "local-exec" {
-#     command = <<EOT
-#       # Log in to Azure using service principal credentials.
-#       az login --service-principal -u "$AZURE_CLIENT_ID" --tenant "$AZURE_TENANT_ID"
+resource "null_resource" "docker_build_push_ngrok" {
+  provisioner "local-exec" {
+    command = <<EOT
+      # Log in to Azure using service principal credentials.
+      az login --service-principal -u "$AZURE_CLIENT_ID" --tenant "$AZURE_TENANT_ID"
 
-#       # Set the active Azure subscription.
-#       az account set --subscription "$AZURE_SUBSCRIPTION_ID"
+      # Set the active Azure subscription.
+      az account set --subscription "$AZURE_SUBSCRIPTION_ID"
 
-#       # Log in to the Azure Container Registry (ACR) specified by its name.
-#       az acr login --name boltslackbotacr
+      # Log in to the Azure Container Registry (ACR) specified by its name.
+      az acr login --name boltslackbotacr
 
-#       # Build the Docker image for ngrok, tagging it with the repository and tag.
-#       docker build \
-#         --build-arg NGROK_AUTHTOKEN="$NGROK_AUTHTOKEN" \
-#         -t boltslackbotacr.azurecr.io/ngrok:latest \
-#         -f Dockerfile2 .
+      # Build the Docker image for ngrok, tagging it with the repository and tag.
+      docker build \
+        --build-arg NGROK_AUTHTOKEN="$NGROK_AUTHTOKEN" \
+        -t boltslackbotacr.azurecr.io/ngrok:latest \
+        -f Dockerfile2 .
 
-#       # Push the built Docker image to the Azure Container Registry (ACR).
-#       docker push boltslackbotacr.azurecr.io/ngrok:latest
-#     EOT
+      # Push the built Docker image to the Azure Container Registry (ACR).
+      docker push boltslackbotacr.azurecr.io/ngrok:latest
+    EOT
 
-#     environment = {
-#       # Azure credentials and configuration variables for authentication and resource access.
-#       AZURE_CLIENT_ID       = var.azure_client_id       # Azure service principal client ID.
-#       AZURE_TENANT_ID       = var.azure_tenant_id       # Azure tenant ID.
-#       AZURE_SUBSCRIPTION_ID = var.azure_subscription_id # Azure subscription ID.
+    environment = {
+      # Azure credentials and configuration variables for authentication and resource access.
+      AZURE_CLIENT_ID       = var.azure_client_id       # Azure service principal client ID.
+      AZURE_TENANT_ID       = var.azure_tenant_id       # Azure tenant ID.
+      AZURE_SUBSCRIPTION_ID = var.azure_subscription_id # Azure subscription ID.
 
-#       # Ngrok authentication token used as a build argument for the Docker image.
-#       NGROK_AUTHTOKEN = var.ngrok_authtoken # Ngrok authentication token.
-#     }
-#   }
+      # Ngrok authentication token used as a build argument for the Docker image.
+      NGROK_AUTHTOKEN = var.ngrok_authtoken # Ngrok authentication token.
+    }
+  }
 
-#   depends_on = [
-#     azurerm_container_registry.example # Replace "example" with the actual resource name of your ACR.
-#   ]
-# }
+  depends_on = [
+    azurerm_container_registry.example # Replace "example" with the actual resource name of your ACR.
+  ]
+}
