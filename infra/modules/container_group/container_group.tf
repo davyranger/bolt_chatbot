@@ -53,7 +53,7 @@ resource "azurerm_container_group" "example" {
     }
 
     environment_variables = {
-      NGROK_AUTHTOKEN = var.ngrok_authtoken  # Assuming this is securely stored
+      NGROK_AUTHTOKEN = var.ngrok_authtoken # Assuming this is securely stored
     }
 
   }
