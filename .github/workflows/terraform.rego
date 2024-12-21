@@ -34,19 +34,17 @@ resource_types = {
 # Authorization holds if score for the plan is acceptable and no changes are made to IAM
 default authz = false
 authz {
-    if score < blast_radius
+    score < blast_radius
 }
 
 # Compute the score for a Terraform plan as the weighted sum of deletions, creations, modifications
 score = s {
-    all := [ x |
-        some resource_type if {
-            crud := weights[resource_type]
-            del := crud["delete"] * num_deletes[resource_type]
-            new := crud["create"] * num_creates[resource_type]
-            mod := crud["modify"] * num_modifies[resource_type]
-            x := del + new + mod
-        }
+    all := [del + new + mod |
+        resource_type := resource_types[_]
+        crud := weights[resource_type]
+        del := crud["delete"] * num_deletes[resource_type]
+        new := crud["create"] * num_creates[resource_type]
+        mod := crud["modify"] * num_modifies[resource_type]
     ]
     s := sum(all)
 }
@@ -57,52 +55,42 @@ score = s {
 
 # list of all resources of a given type
 resources[resource_type] = all {
-    some resource_type if {
-        resource_types[resource_type]
-        all := [name |
-            name := tfplan.resource_changes[_]
-            if name.type == resource_type
-        ]
-    }
+    resource_types[resource_type]
+    all := [name |
+        name := tfplan.resource_changes[_]
+        name.type == resource_type
+    ]
 }
 
 # number of deletions of resources of a given type
 num_deletes[resource_type] = num {
-    some resource_type if {
-        resource_types[resource_type]
-        all := resources[resource_type]
-        deletions := [res |
-            res := all[_]
-            if res.change.actions[_] == "delete"
-        ]
-        num := count(deletions)
-    }
+    resource_types[resource_type]
+    all := resources[resource_type]
+    deletions := [res |
+        res := all[_]
+        "delete" in res.change.actions
+    ]
+    num := count(deletions)
 }
 
 # number of creations of resources of a given type
-num_deletes[resource_type] = num {
-    some resource_type if {
-        resource_types[resource_type]
-        all := resources[resource_type]
-        deletions := [res |
-            res := all[_]
-            if res.change.actions[_] == "create"
-        ]
-        num := count(deletions)
-    }
+num_creates[resource_type] = num {
+    resource_types[resource_type]
+    all := resources[resource_type]
+    creations := [res |
+        res := all[_]
+        "create" in res.change.actions
+    ]
+    num := count(creations)
 }
-
 
 # number of modifications to resources of a given type
-num_deletes[resource_type] = num {
-    some resource_type if {
-        resource_types[resource_type]
-        all := resources[resource_type]
-        deletions := [res |
-            res := all[_]
-            if res.change.actions[_] == "update"
-        ]
-        num := count(deletions)
-    }
+num_modifies[resource_type] = num {
+    resource_types[resource_type]
+    all := resources[resource_type]
+    modifications := [res |
+        res := all[_]
+        "update" in res.change.actions
+    ]
+    num := count(modifications)
 }
-
