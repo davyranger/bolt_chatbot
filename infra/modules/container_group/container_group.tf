@@ -56,14 +56,6 @@ resource "azurerm_container_group" "example" {
       NGROK_AUTHTOKEN = var.ngrok_authtoken # Assuming this is securely stored
     }
 
-    commands = [
-      "ngrok",
-      "http",
-      "3000",
-      "--region=au",
-      "--hostname=boltslackbot.australiaeast.azurecontainer.io"
-    ]
-
   }
 
   image_registry_credential {

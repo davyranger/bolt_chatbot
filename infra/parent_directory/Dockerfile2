@@ -12,7 +12,7 @@ RUN curl -sL https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-linux-amd64.tg
 EXPOSE 443
 
 # Set environment variable for ngrok authtoken
-ENV NGROK_AUTHTOKEN=$NGROK_AUTHTOKEN
+ENV NGROK_AUTHTOKEN=${NGROK_AUTHTOKEN}
 
 # Start ngrok with the authtoken and expose the container's port
 ENTRYPOINT ["sh", "-c", "ngrok authtoken $NGROK_AUTHTOKEN && ngrok http 0.0.0.0:443"]
