@@ -15,6 +15,9 @@ resource "azurerm_container_group" "example" {
   location            = "australiaeast"
   resource_group_name = "slack-bot-rg"
   os_type             = "Linux"
+  ip_address_type     = "Public"
+  dns_name_label      = "boltslackbot"
+  restart_policy      = "Always"
 
   identity {
     type         = "UserAssigned"
@@ -28,13 +31,31 @@ resource "azurerm_container_group" "example" {
     memory = "1.5"
 
     ports {
-      port = 80
+      port     = 80
+      protocol = "TCP"
     }
 
     environment_variables = {
-      SLACK_BOT_TOKEN = var.slack_bot_token
-      SLACK_APP_TOKEN = var.slack_app_token
+      SLACK_BOT_TOKEN_HTTP = var.slack_bot_token_http
+      SLACK_APP_TOKEN_HTTP = var.slack_app_token_http
     }
+  }
+
+  container {
+    name   = "ngrok"
+    image  = "boltslackbotacr.azurecr.io/ngrok:latest"
+    cpu    = "0.5"
+    memory = "0.5"
+
+    ports {
+      port     = 4040
+      protocol = "TCP"
+    }
+
+    environment_variables = {
+      NGROK_AUTHTOKEN = var.ngrok_authtoken # Assuming this is securely stored
+    }
+
   }
 
   image_registry_credential {
