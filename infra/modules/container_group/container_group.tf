@@ -31,7 +31,7 @@ resource "azurerm_container_group" "example" {
     memory = "1.5"
 
     ports {
-      port     = 80
+      port     = 3000
       protocol = "TCP"
     }
 
@@ -59,7 +59,7 @@ resource "azurerm_container_group" "example" {
     commands = [
       "ngrok",
       "http",
-      "80",
+      "3000",
       "--region=au",
       "--hostname=boltslackbot.australiaeast.azurecontainer.io"
     ]
