@@ -48,13 +48,21 @@ resource "azurerm_container_group" "example" {
     memory = "0.5"
 
     ports {
-      port     = 4040
+      port     = 443
       protocol = "TCP"
     }
 
     environment_variables = {
       NGROK_AUTHTOKEN = var.ngrok_authtoken # Assuming this is securely stored
     }
+
+    commands = [
+      "ngrok",
+      "http",
+      "80",
+      "--region=au",
+      "--hostname=boltslackbot.australiaeast.azurecontainer.io"
+    ]
 
   }
 
