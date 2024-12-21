@@ -40,7 +40,7 @@ authz if {
 }
 
 # Compute the score for a Terraform plan as the weighted sum of deletions, creations, modifications
-score = s {
+score = s if {
     all := [ x |
             some resource_type
             crud := weights[resource_type]
