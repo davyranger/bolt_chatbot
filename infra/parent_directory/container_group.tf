@@ -8,7 +8,7 @@ module "container_group" {
   slack_app_token_http    = var.slack_app_token_http
   azure_subscription_id   = var.azure_subscription_id
   ngrok_authtoken         = var.ngrok_authtoken
-
+  
   depends_on = [
     module.container
   ]
