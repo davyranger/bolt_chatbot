@@ -15,4 +15,4 @@ EXPOSE 443
 ENV NGROK_AUTHTOKEN=${NGROK_AUTHTOKEN}
 
 # Start ngrok with the authtoken and expose the container's port
-ENTRYPOINT ["sh", "-c", "ngrok authtoken $NGROK_AUTHTOKEN && ngrok http 0.0.0.0:443"]
+ENTRYPOINT ["sh", "-c", "ngrok authtoken $NGROK_AUTHTOKEN && ngrok http 80"]
