@@ -10,7 +10,7 @@ terraform {
     }
   }
 
-  required_version = ">= 1.9.0"
+  required_version = "= 1.9.8"
 
   # Configuration for storing Terraform state remotely in an Azure storage account
 
