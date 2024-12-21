@@ -35,7 +35,7 @@ resource_types = {
 
 # Authorization holds if score for the plan is acceptable and no changes are made to IAM
 default authz = false
-authz {
+authz if {
     score < blast_radius
 }
 
