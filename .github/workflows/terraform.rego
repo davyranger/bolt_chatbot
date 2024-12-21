@@ -67,7 +67,7 @@ resources[resource_type] = all if {
 }
 
 # number of deletions of resources of a given type
-num_deletes[resource_type] = num {
+num_deletes[resource_type] = num if {
     some resource_type
     resource_types[resource_type]
     all := resources[resource_type]
