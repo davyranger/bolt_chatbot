@@ -85,7 +85,7 @@ num_creates[resource_type] = num if {
 }
 
 # number of modifications to resources of a given type
-num_modifies[resource_type] = num {
+num_modifies[resource_type] = num if {
     some resource_type
     resource_types[resource_type]
     all := resources[resource_type]
