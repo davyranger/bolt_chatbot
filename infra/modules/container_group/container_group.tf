@@ -44,8 +44,8 @@ resource "azurerm_container_group" "example" {
   container {
     name   = "ngrok"
     image  = "boltslackbotacr.azurecr.io/ngrok:latest"
-    cpu    = "0.5"
-    memory = "0.5"
+    cpu    = "1.0"
+    memory = "1.5"
 
     ports {
       port     = 443
