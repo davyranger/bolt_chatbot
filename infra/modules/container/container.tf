@@ -32,7 +32,8 @@ resource "null_resource" "docker_build_push" {
       docker build \
         --build-arg SLACK_BOT_TOKEN_HTTP="$SLACK_BOT_TOKEN_HTTP" \
         --build-arg SLACK_APP_TOKEN_HTTP="$SLACK_APP_TOKEN_HTTP" \
-        -t boltslackbotacr.azurecr.io/slack-bot:latest .Dockerfile
+        -t boltslackbotacr.azurecr.io/slack-bot:latest \
+        -f Dockerfile .
 
       # Push the built Docker image to the Azure Container Registry (ACR).
       docker push boltslackbotacr.azurecr.io/slack-bot:latest
