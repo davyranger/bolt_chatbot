@@ -36,7 +36,7 @@ resource "azurerm_container_group" "example" {
     }
 
     environment_variables = {
-      SLACK_BOT_TOKEN = var.slack_bot_token
+      SLACK_BOT_TOKEN      = var.slack_bot_token
       SLACK_SIGNING_SECRET = var.slack_signing_secret
     }
   }
@@ -75,3 +75,4 @@ resource "azurerm_container_group" "example" {
     azurerm_role_assignment.acr_pull
   ]
 }
+

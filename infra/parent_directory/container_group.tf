@@ -4,7 +4,7 @@ module "container_group" {
   resource_group_name     = module.container.rg_name
   resource_group_location = module.container.rg_location
   container_registry      = module.container.cg_id
-  slack_bot_token    = var.slack_bot_token
+  slack_bot_token         = var.slack_bot_token
   slack_signing_secret    = var.slack_signing_secret
   azure_subscription_id   = var.azure_subscription_id
   ngrok_authtoken         = var.ngrok_authtoken

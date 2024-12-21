@@ -47,7 +47,7 @@ resource "null_resource" "docker_build_push" {
       AZURE_SUBSCRIPTION_ID = var.azure_subscription_id # Azure subscription ID.
 
       # Slack bot tokens used as build arguments for the Docker image.
-      SLACK_BOT_TOKEN = var.slack_bot_token # Slack bot token for authentication.
+      SLACK_BOT_TOKEN      = var.slack_bot_token      # Slack bot token for authentication.
       SLACK_SIGNING_SECRET = var.slack_signing_secret # Slack app token for authentication.
     }
   }
