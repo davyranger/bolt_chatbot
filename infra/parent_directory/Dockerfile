@@ -12,9 +12,9 @@ COPY first-bolt-app/ /app/
 RUN pip install -r ./requirements.txt
 
 # Set environment variables
-ENV SLACK_BOT_TOKEN_HTTP=${SLACK_BOT_TOKEN_HTTP}
+ENV SLACK_BOT_TOKEN=${SLACK_BOT_TOKEN}
 
-ENV SLACK_APP_TOKEN_HTTP=${SLACK_APP_TOKEN_HTTP}
+ENV SLACK_SIGNING_SECRET=${SLACK_SIGNING_SECRET}
 
 # Run the app
 CMD ["python", "app.py"]

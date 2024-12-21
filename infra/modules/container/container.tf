@@ -30,8 +30,8 @@ resource "null_resource" "docker_build_push" {
 
       # Build the Docker image with arguments for Slack bot tokens, tagging it with the repository and tag.
       docker build \
-        --build-arg SLACK_BOT_TOKEN_HTTP="$SLACK_BOT_TOKEN_HTTP" \
-        --build-arg SLACK_APP_TOKEN_HTTP="$SLACK_APP_TOKEN_HTTP" \
+        --build-arg SLACK_BOT_TOKEN="$SLACK_BOT_TOKEN" \
+        --build-arg SLACK_SIGNING_SECRET="$SLACK_SIGNING_SECRET" \
         -t boltslackbotacr.azurecr.io/slack-bot:latest \
         -f Dockerfile .
 
@@ -47,8 +47,8 @@ resource "null_resource" "docker_build_push" {
       AZURE_SUBSCRIPTION_ID = var.azure_subscription_id # Azure subscription ID.
 
       # Slack bot tokens used as build arguments for the Docker image.
-      SLACK_BOT_TOKEN_HTTP = var.slack_bot_token_http # Slack bot token for authentication.
-      SLACK_APP_TOKEN_HTTP = var.slack_app_token_http # Slack app token for authentication.
+      SLACK_BOT_TOKEN = var.slack_bot_token # Slack bot token for authentication.
+      SLACK_SIGNING_SECRET = var.slack_signing_secret # Slack app token for authentication.
     }
   }
 

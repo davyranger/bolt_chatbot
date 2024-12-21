@@ -36,8 +36,8 @@ resource "azurerm_container_group" "example" {
     }
 
     environment_variables = {
-      SLACK_BOT_TOKEN_HTTP = var.slack_bot_token_http
-      SLACK_APP_TOKEN_HTTP = var.slack_app_token_http
+      SLACK_BOT_TOKEN = var.slack_bot_token
+      SLACK_SIGNING_SECRET = var.slack_signing_secret
     }
   }
 
