@@ -15,7 +15,8 @@ weights = {
     "azurerm_container_registry": {"delete": 10, "create": 10, "modify": 1},
     "azurerm_container_group": {"delete": 10, "create": 10, "modify": 1},
     "azurerm_role_assignment": {"delete": 10, "create": 5, "modify": 1},
-    "azurerm_user_assigned_identity": {"delete": 10, "create": 1, "modify": 1}
+    "azurerm_user_assigned_identity": {"delete": 10, "create": 1, "modify": 1},
+    "null_resource": {"delete": 10, "create": 10, "modify": 1}
 }
 
 # Consider exactly these resource types in calculations
@@ -24,7 +25,8 @@ resource_types = {
     "azurerm_container_registry",
     "azurerm_container_group",
     "azurerm_role_assignment",
-    "azurerm_user_assigned_identity"
+    "azurerm_user_assigned_identity",
+    "null_resource"
 }
 
 #########
@@ -39,12 +41,13 @@ authz {
 
 # Compute the score for a Terraform plan as the weighted sum of deletions, creations, modifications
 score = s {
-    all := [del + new + mod |
-        resource_type = resource_types[_];  # Iterate over resource_types
-        crud = weights[resource_type];
-        del = crud["delete"] * num_deletes[resource_type];
-        new = crud["create"] * num_creates[resource_type];
-        mod = crud["modify"] * num_modifies[resource_type]
+    all := [ x |
+            some resource_type
+            crud := weights[resource_type]
+            del := crud["delete"] * num_deletes[resource_type]
+            new := crud["create"] * num_creates[resource_type]
+            mod := crud["modify"] * num_modifies[resource_type]
+            x := del + new + mod
     ]
     s := sum(all)
 }
@@ -55,42 +58,37 @@ score = s {
 
 # list of all resources of a given type
 resources[resource_type] = all {
+    some resource_type
     resource_types[resource_type]
     all := [name |
-        name := tfplan.resource_changes[_];
+        name:= tfplan.resource_changes[_]
         name.type == resource_type
     ]
 }
 
 # number of deletions of resources of a given type
 num_deletes[resource_type] = num {
+    some resource_type
     resource_types[resource_type]
     all := resources[resource_type]
-    deletions := [res |
-        res := all[_];
-        "delete" in res.change.actions
-    ]
+    deletions := [res | res := all[_]; res.change.actions[_] == "delete"]
     num := count(deletions)
 }
 
 # number of creations of resources of a given type
 num_creates[resource_type] = num {
+    some resource_type
     resource_types[resource_type]
     all := resources[resource_type]
-    creations := [res |
-        res := all[_];
-        "create" in res.change.actions
-    ]
-    num := count(creations)
+    creates := [res | res := all[_]; res.change.actions[_] == "create"]
+    num := count(creates)
 }
 
 # number of modifications to resources of a given type
 num_modifies[resource_type] = num {
+    some resource_type
     resource_types[resource_type]
     all := resources[resource_type]
-    modifications := [res |
-        res := all[_];
-        "update" in res.change.actions
-    ]
-    num := count(modifications)
+    modifies := [res | res := all[_]; res.change.actions[_] == "update"]
+    num := count(modifies)
 }
