@@ -57,7 +57,7 @@ score = s if {
 ####################
 
 # list of all resources of a given type
-resources[resource_type] = all {
+resources[resource_type] = all if {
     some resource_type
     resource_types[resource_type]
     all := [name |
