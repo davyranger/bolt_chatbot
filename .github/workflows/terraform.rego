@@ -40,11 +40,11 @@ authz {
 # Compute the score for a Terraform plan as the weighted sum of deletions, creations, modifications
 score = s {
     all := [del + new + mod |
-        resource_type := resource_types[_]
-        crud := weights[resource_type]
-        del := crud["delete"] * num_deletes[resource_type]
-        new := crud["create"] * num_creates[resource_type]
-        mod := crud["modify"] * num_modifies[resource_type]
+        resource_type = resource_types[_];  # Iterate over resource_types
+        crud = weights[resource_type];
+        del = crud["delete"] * num_deletes[resource_type];
+        new = crud["create"] * num_creates[resource_type];
+        mod = crud["modify"] * num_modifies[resource_type]
     ]
     s := sum(all)
 }
@@ -57,7 +57,7 @@ score = s {
 resources[resource_type] = all {
     resource_types[resource_type]
     all := [name |
-        name := tfplan.resource_changes[_]
+        name := tfplan.resource_changes[_];
         name.type == resource_type
     ]
 }
@@ -67,7 +67,7 @@ num_deletes[resource_type] = num {
     resource_types[resource_type]
     all := resources[resource_type]
     deletions := [res |
-        res := all[_]
+        res := all[_];
         "delete" in res.change.actions
     ]
     num := count(deletions)
@@ -78,7 +78,7 @@ num_creates[resource_type] = num {
     resource_types[resource_type]
     all := resources[resource_type]
     creations := [res |
-        res := all[_]
+        res := all[_];
         "create" in res.change.actions
     ]
     num := count(creations)
@@ -89,7 +89,7 @@ num_modifies[resource_type] = num {
     resource_types[resource_type]
     all := resources[resource_type]
     modifications := [res |
-        res := all[_]
+        res := all[_];
         "update" in res.change.actions
     ]
     num := count(modifications)
