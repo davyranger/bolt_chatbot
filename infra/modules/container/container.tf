@@ -12,7 +12,14 @@ resource "azurerm_container_registry" "example" {
 
 # Define a null resource named "docker_build_push"
 # This resource does not create or manage any infrastructure but is used to run local commands.
+resource "random_id" "example" {
+  byte_length = 8
+}
+
 resource "null_resource" "docker_build_push" {
+  triggers = {
+    rebuild = random_id.example.hex
+  }
 
   # Use the "local-exec" provisioner to execute shell commands locally on the machine where Terraform is run.
   provisioner "local-exec" {
@@ -59,6 +66,9 @@ resource "null_resource" "docker_build_push" {
 }
 
 resource "null_resource" "docker_build_push_ngrok" {
+  triggers = {
+    rebuild = random_id.example.hex
+  }
   provisioner "local-exec" {
     command = <<EOT
       # Log in to Azure using service principal credentials.
