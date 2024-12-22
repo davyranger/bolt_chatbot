@@ -28,6 +28,12 @@ def message_hello(message, say):
         text=f"Hey there <@{user_id}>!"
     )
 
+@app.action("button_click")
+def action_button_click(body, ack, say):
+    # Acknowledge the action
+    ack()
+    say(f"<@{body['user']['id']}> clicked the button")
+
 # Start your app
 if __name__ == "__main__":
     app.start(port=int(os.environ.get("PORT", 3000)))
