@@ -1,3 +1,36 @@
+#####################################################
+# what the IAC creates
+#####################################################
+
+# Slack Bot with ngrok in Azure Container Group
+
+This project deploys a Slack bot application (https://tools.slack.dev/bolt-python/tutorial/getting-started-http/) and **ngrok** as separate containers in an Azure Container Group. The Slack bot listens on port 3000, and ngrok exposes this application to the internet using a public HTTPS endpoint.
+
+## Architecture Overview
+
+- **Slack Bot Container**: Runs the Slack bot application, listening on port 3000.
+- **ngrok Container**: Creates a secure tunnel to expose the Slack bot container to the internet.
+- **Azure Container Group**: Hosts both containers with shared networking.
+
+## How It Works
+
+1. **Slack Bot Container**:
+   - Listens for incoming requests on port 3000.
+   - Processes Slack interactions, such as event subscriptions or slash commands.
+
+2. **ngrok Container**:
+   - Authenticates using the provided `NGROK_AUTHTOKEN` environment variable.
+   - Creates a public HTTPS tunnel that forwards traffic to the Slack bot container on port 3000.
+   - The public ngrok URL is used in Slack's app configuration as the **Request URL**.
+
+### Key Dockerfile Command for ngrok
+
+The following `ENTRYPOINT` command in the ngrok container starts the tunnel:
+
+```dockerfile
+ENTRYPOINT ["sh", "-c", "ngrok authtoken $NGROK_AUTHTOKEN && ngrok http 3000"]
+
+
 # bolt_chatbot
 
 az login
