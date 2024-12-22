@@ -10,23 +10,27 @@ app = App(
 # Listens to incoming messages that contain "hello"
 @app.message("hello")
 def message_hello(message, say):
-    user_id = message.get('user', 'unknown_user')
-    print(f"Received message from {user_id}")
+    # say() sends a message to the channel where the event was triggered
     say(
-        blocks=[{
-            "type": "section",
-            "text": {
-                "type": "mrkdwn", 
-                "text": f"Hey there <@{user_id}>!"  # User mention as part of the message
-            },
-            "accessory": {
-                "type": "button",
-                "text": {"type": "plain_text", "text": "Click Me"},
-                "action_id": "button_click"
+        blocks=[
+            {
+                "type": "section",
+                "text": {"type": "mrkdwn", "text": f"Hey there <@{message['user']}>!"},
+                "accessory": {
+                    "type": "button",
+                    "text": {"type": "plain_text", "text": "Click Me"},
+                    "action_id": "button_click"
+                }
             }
-        }],
-        text=f"Hey there <@{user_id}>!"
+        ],
+        text=f"Hey there <@{message['user']}>!"
     )
+
+@app.action("button_click")
+def action_button_click(body, ack, say):
+    # Acknowledge the action
+    ack()
+    say(f"<@{body['user']['id']}> clicked the button")
 
 # Start your app
 if __name__ == "__main__":
