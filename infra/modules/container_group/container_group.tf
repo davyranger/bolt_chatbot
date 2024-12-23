@@ -18,7 +18,12 @@ resource "azurerm_container_group" "example" {
   ip_address_type     = "Public"
   dns_name_label      = "boltslackbot"
   restart_policy      = "Always"
-
+  exposed_port = [
+    {
+      port     = 80
+      protocol = "TCP"
+    }
+  ]
   identity {
     type         = "UserAssigned"
     identity_ids = [azurerm_user_assigned_identity.managed_identity.id]
@@ -55,7 +60,6 @@ resource "azurerm_container_group" "example" {
     }
 
   }
-
   image_registry_credential {
     user_assigned_identity_id = azurerm_user_assigned_identity.managed_identity.id
     server                    = "boltslackbotacr.azurecr.io"
