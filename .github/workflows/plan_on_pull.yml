@@ -19,7 +19,7 @@ env:
   NGROK_AUTHTOKEN: "${{ secrets.NGROK_AUTHTOKEN }}"
 
 jobs:
-  terraform-plan-policy-check:
+  terraform-plan:
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
 

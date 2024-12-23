@@ -18,7 +18,7 @@ env:
   NGROK_AUTHTOKEN: "${{ secrets.NGROK_AUTHTOKEN }}"
 
 jobs:
-  terraform:
+  terraform-destroy:
     runs-on: ubuntu-latest
 
     permissions:
