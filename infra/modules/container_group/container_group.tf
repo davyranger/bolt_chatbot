@@ -30,7 +30,8 @@ resource "azurerm_container_group" "example" {
     cpu    = "1.0"
     memory = "1.5"
 
-    # no port exposed to the public internet as the app will get exposed to where it needs to respond to via ngrok
+    # Do NOT expose any ports for this container
+    # The application will be communicated with via the NGROK tunnel
 
     environment_variables = {
       SLACK_BOT_TOKEN      = var.slack_bot_token
