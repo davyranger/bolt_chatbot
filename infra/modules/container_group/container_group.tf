@@ -18,7 +18,7 @@ resource "azurerm_container_group" "example" {
   ip_address_type     = "Public"
   dns_name_label      = "boltslackbot"
   restart_policy      = "Always"
-  exposed_port        = [80]
+  exposed_port        = { port = 80, protocol = "TCP" }
 
   identity {
     type         = "UserAssigned"
