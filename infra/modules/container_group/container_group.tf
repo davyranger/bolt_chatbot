@@ -30,10 +30,7 @@ resource "azurerm_container_group" "example" {
     cpu    = "1.0"
     memory = "1.5"
 
-    ports {
-      port     = 3000
-      protocol = "TCP"
-    }
+    # no port exposed to the public internet as the app will get exposed to where it needs to respond to via ngrok
 
     environment_variables = {
       SLACK_BOT_TOKEN      = var.slack_bot_token
@@ -48,7 +45,7 @@ resource "azurerm_container_group" "example" {
     memory = "1.5"
 
     ports {
-      port     = 443
+      port     = 80
       protocol = "TCP"
     }
 
