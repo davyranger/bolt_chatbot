@@ -7,10 +7,14 @@
 ## 🤔 Why
  
 <!-- A brief description of the reason for these changes. -->
+
+- [] Check Done
  
 ## 👩‍🔬 How to validate
  
 <!-- Step-by-step instructions for how reviewers can verify these changes work as expected. -->
+
+- [] Check Done
  
 ## 🔖 Further reading
  
