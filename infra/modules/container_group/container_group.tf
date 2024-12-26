@@ -14,6 +14,7 @@ resource "azurerm_container_group" "example" {
   name                = "boltslackbotgroup"
   location            = "australiaeast"
   resource_group_name = "slack-bot-rg"
+  ip_address_type     = "private"
   os_type             = "Linux"
   restart_policy      = "Always" # keep the container running even though it crashes or the process has completed
   identity {
