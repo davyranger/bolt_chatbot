@@ -12,7 +12,5 @@ RUN curl -sL https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-linux-amd64.tg
 ENV NGROK_AUTHTOKEN=${NGROK_AUTHTOKEN}  
 
 # Start ngrok with the authtoken and expose the container's port
-ENTRYPOINT ["ngrok", "http", "3000"]
-# ENTRYPOINT ["sh", "-c", "ngrok authtoken $NGROK_AUTHTOKEN && ngrok http 3000"]  
-# The ENTRYPOINT command starts ngrok, which creates a tunnel to port 3000 in the container, 
-# but this does not expose the port itself.
+ENTRYPOINT ["ngrok", "http", "3000"] 
+# The ENTRYPOINT command starts ngrok, which creates a tunnel to port 3000 in the container.
