@@ -14,4 +14,3 @@ ENV NGROK_AUTHTOKEN=${NGROK_AUTHTOKEN}
 # Start ngrok with the authtoken and expose the container's port
 ENTRYPOINT ["ngrok", "http", "3000"] 
 # The ENTRYPOINT command starts ngrok, which creates a tunnel to port 3000 in the container.
-
