@@ -19,4 +19,4 @@
 ## 🔖 Further reading
  
 - [Jira task](<link>)
-- [Slack thread](<link>)
+- [Slack thread](https://davystrain.slack.com/archives/C03RSKP01GC)
