@@ -12,8 +12,8 @@ resource "azurerm_user_assigned_identity" "managed_identity" {
 
 resource "azurerm_container_group" "example" {
   name                = "boltslackbotgroup"
-  location            = "australiaeast"
-  resource_group_name = "slack-bot-rg"
+  location            = var.resource_group_location
+  resource_group_name = var.resource_group_name
   ip_address_type     = "None"
   os_type             = "Linux"
   restart_policy      = "Always" # keep the container running even though it crashes or the process has completed

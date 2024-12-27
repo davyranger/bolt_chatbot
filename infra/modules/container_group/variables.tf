@@ -12,10 +12,6 @@ variable "resource_group_location" {
   description = "Resource Group Location"
   type        = string
 }
-variable "container_registry" {
-  description = "Container Registry ID"
-  type        = string
-}
 
 variable "slack_bot_token" {
   description = "Slack Bot Token"
@@ -30,7 +26,7 @@ variable "slack_signing_secret" {
 }
 variable "azure_subscription_id" {
   type      = string
-  sensitive = true
+  sensitive = true # Marks this as sensitive to prevent showing in logs
 }
 
 variable "ngrok_authtoken" {

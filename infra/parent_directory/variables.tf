@@ -12,17 +12,17 @@ variable "slack_signing_secret" {
 
 variable "azure_client_id" {
   type      = string
-  sensitive = true
+  sensitive = true # Marks this as sensitive to prevent showing in logs
 }
 
 variable "azure_tenant_id" {
   type      = string
-  sensitive = true
+  sensitive = true # Marks this as sensitive to prevent showing in logs
 }
 
 variable "azure_subscription_id" {
   type      = string
-  sensitive = true
+  sensitive = true # Marks this as sensitive to prevent showing in logs
 }
 
 variable "ngrok_authtoken" {
