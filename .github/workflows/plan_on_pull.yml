@@ -1,3 +1,5 @@
+# https://docs.github.com/en/actions
+
 name: Azure Plan Workflow
 
 on:
@@ -6,6 +8,8 @@ on:
       - main
       
 # Special permissions required for OIDC authentication
+# https://docs.github.com/en/actions/security-for-github-actions/security-hardening-your-deployments/about-security-hardening-with-openid-connect#adding-permissions-settings
+
 permissions:
   id-token: write
   contents: read
@@ -39,6 +43,7 @@ jobs:
         tenant-id: ${{ secrets.AZURE_TENANT_ID }}
         subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
+    # TF_VAR_ info - https://developer.hashicorp.com/terraform/language/values/variables#environment-variables
     - name: Set environment variables
       run: |
         echo "TF_VAR_azure_client_id=${{ secrets.AZURE_CLIENT_ID }}" >> $GITHUB_ENV
