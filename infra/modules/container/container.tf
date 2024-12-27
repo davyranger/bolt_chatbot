@@ -40,7 +40,7 @@ resource "null_resource" "docker_build_push" {
         --build-arg SLACK_BOT_TOKEN="$SLACK_BOT_TOKEN" \
         --build-arg SLACK_SIGNING_SECRET="$SLACK_SIGNING_SECRET" \
         -t boltslackbotacr.azurecr.io/slack-bot:latest \
-        -f Dockerfile .
+        -f Dockerfile.app .
 
       # Push the built Docker image to the Azure Container Registry (ACR).
       docker push boltslackbotacr.azurecr.io/slack-bot:latest
@@ -84,7 +84,7 @@ resource "null_resource" "docker_build_push_ngrok" {
       docker build \
         --build-arg NGROK_AUTHTOKEN="$NGROK_AUTHTOKEN" \
         -t boltslackbotacr.azurecr.io/ngrok:latest \
-        -f Dockerfile2 .
+        -f Dockerfile.ngrok .
 
       # Push the built Docker image to the Azure Container Registry (ACR).
       docker push boltslackbotacr.azurecr.io/ngrok:latest
