@@ -8,7 +8,9 @@ on:
       - main
       
 # Special permissions required for OIDC authentication
-# https://docs.github.com/en/actions/security-for-github-actions/security-hardening-your-deployments/about-security-hardening-with-openid-connect#adding-permissions-settings
+# configure github actions - https://docs.github.com/en/actions/security-for-github-actions/security-hardening-your-deployments/about-security-hardening-with-openid-connect#adding-permissions-settings
+# configure azure resources - https://learn.microsoft.com/en-us/azure/developer/github/connect-from-azure-openid-connect#prerequisites
+# register an app in microsoft entra id tenant - https://learn.microsoft.com/en-us/entra/identity-platform/howto-create-service-principal-portal#prerequisites
 
 permissions:
   id-token: write
