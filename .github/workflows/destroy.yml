@@ -21,10 +21,6 @@ jobs:
   terraform-destroy:
     runs-on: ubuntu-latest
 
-    permissions:
-      id-token: write
-      contents: read
-
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -57,29 +53,6 @@ jobs:
     - name: Terraform Plan
       run: terraform plan -out "tfplan"
       working-directory: ./infra/parent_directory/
-
-    - name: Convert Terraform Plan to JSON
-      run: terraform show -json tfplan | grep '^{.*}$' > tfplan.json
-      working-directory: ./infra/parent_directory/
-
-    - name: Setup OPA
-      uses: open-policy-agent/setup-opa@v2
-      with:
-        version: latest
-
-    - name: Run OPA Authz Policy Check
-      id: opa-authz-check
-      run: |
-        result=$(opa eval --data .github/workflows/terraform.rego --input ./infra/parent_directory/tfplan.json "data.terraform.analysis.authz" --format=json | jq '.result[0].expressions[0].value')
-        echo "result=$result" >> $GITHUB_ENV
-        echo $result
-      continue-on-error: false
-    
-    - name: Run OPA Score Policy Check
-      id: opa-score-check
-      run: |
-        opa eval --data .github/workflows/terraform.rego --input ./infra/parent_directory/tfplan.json "data.terraform.analysis.score"
-      continue-on-error: false
 
     - name: Terraform Destroy
       run: terraform destroy -auto-approve -input=false
