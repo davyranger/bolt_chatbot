@@ -28,10 +28,10 @@ This project deploys a Slack bot application (https://tools.slack.dev/bolt-pytho
 The following `ENTRYPOINT` command in the ngrok container starts the tunnel:
 
 ```dockerfile
-ENTRYPOINT ["sh", "-c", "ngrok authtoken $NGROK_AUTHTOKEN && ngrok http 3000"]
+ENTRYPOINT ["ngrok", "http", "3000"]
 
 
-# bolt_chatbot
+# bolt_chatbot built on local machine for testing
 
 az login
 
@@ -69,5 +69,5 @@ https://learn.microsoft.com/en-us/entra/workload-id/workload-identity-federation
 
 ### using, for example this - "echo "TF_VAR_azure_client_id=${{ secrets.AZURE_CLIENT_ID }}" >> $GITHUB_ENV"
 ### means that you don't have to hardcode any values into a local terraform tfvars config file
-### The variable will be available for using in the github actions job
+### The variable will be available for use in the github actions job
 
