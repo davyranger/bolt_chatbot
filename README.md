@@ -4,6 +4,8 @@
 
 # Slack Bot with ngrok in Azure Container Group
 
+![alt text](image.png)
+
 This project deploys a Slack bot application (https://tools.slack.dev/bolt-python/tutorial/getting-started-http/) and **ngrok** as separate containers in an Azure Container Group. The Slack bot listens on port 3000, and ngrok exposes this application to the internet using a public HTTPS endpoint.
 
 ## Architecture Overview
